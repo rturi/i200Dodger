@@ -3,7 +3,7 @@ import java.util.Random;
 /**
  * Created by Roland on 10/10/2015.
  */
-//test change
+
 import java.util.Random;
 
 public class Game {
@@ -50,7 +50,7 @@ public class Game {
 
     public static class GameBoard {
 
-        Obstacle[][] board = new Obstacle[3][5];
+        Obstacle[][] board = new Obstacle[][];
 
         public static void printGameBoard(int i, int j){
 
