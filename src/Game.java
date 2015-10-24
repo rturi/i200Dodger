@@ -51,7 +51,7 @@ public class Game {
     public static class GameBoard {
 
         Obstacle[][] board = new Obstacle[][];
-        //test
+        //test2
         public static void printGameBoard(int i, int j){
 
             //TODO: Prints obstacle colors as text in console
