@@ -40,7 +40,11 @@ public class Dodger {
                 game.printGame();
             }
             System.out.println();
-            System.out.println("Score: " + game.player.score);
+            System.out.println("Score: " + game.player.score + " Lives: " + game.player.lives);
+            if (game.player.lives == 0){
+                System.out.println("Game over");
+                break;
+            }
         }
 
     }
@@ -123,6 +127,7 @@ public class Dodger {
         int position;
         int range;
         int score;
+        int lives;
         String color;
         String name;
 
@@ -132,6 +137,7 @@ public class Dodger {
             position = (int) boardWidth / 2;
             color = "blue";
             score = 0;
+            lives = 3;
 
         }
 
@@ -157,13 +163,15 @@ public class Dodger {
         }
 
         public void printGame (){
-
+            System.out.println(player.lives);
             for (int i = 0; i < board.obstacleSet.length ; i++) {
                 for (int j = 0; j < board.obstacleSet[0].length; j++) {
 
                     if ((i == board.obstacleSet.length-1) && player.position == j) {
                         System.out.print("[P1] ");
                         if (player.color.equals(board.obstacleSet[i][j].color)) player.score++;
+                        else if (board.obstacleSet[i][j].color.equals("____")) {}//do nothing
+                        else player.lives--;
                     }
                     else
                         System.out.print(board.obstacleSet[i][j].getColor() + " ");
