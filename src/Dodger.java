@@ -1,51 +1,73 @@
-import java.util.Random;
+import javafx.application.Application;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+//import java.util.Random;
 import java.util.Scanner;
 
-public class Dodger {
+public class Dodger extends Application{
 
-    public static void main(String[] args){
+
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
 
         Game game = new Game();
 
-        game.initiateGame(6,3);
+        primaryStage.setTitle("Dodger");
 
-        System.out.println("Press 'a' to move left, 'd' to move right, 's' to stay put, 'q' to quit");
-        System.out.println();
+        VBox startMenuVbox = new VBox();
+        BorderPane gamePane = new BorderPane();
+        Pane gameField = new Pane();
+        Scene startMenuScene = new Scene(startMenuVbox);
+        Scene gameScene = new Scene(gamePane);
+        Button startGameButton = new Button("Start");
+        Button endGameButton = new Button("End");
 
-        for (int i = 0; i < 4; i++) {
-            game.board.insertRow();
-        }
-        game.printGame();
+        Rectangle testRuut = new Rectangle(10, 100, 310, 310);
 
-        Scanner sc = new Scanner(System.in);
+        gameScene.setOnKeyPressed(event -> {
+            String input = event.getCharacter();
+            System.out.println(input);
+        });
 
-        while(true){
 
-            String move = sc.next();
 
-            if (move.equals("q"))break;
+        startGameButton.setOnAction(event -> {
+            System.out.println("test");
+            primaryStage.setScene(gameScene);
 
-            if (move.equals("a")){
-                game.board.insertRow();
-                game.player.movePlayer("left");
-                game.printGame();
-            }
-            else if (move.equals("d")) {
-                game.board.insertRow();
-                game.player.movePlayer("right");
-                game.printGame();
-            }
-            else if (move.equals("s")) {
-                game.board.insertRow();
-                game.printGame();
-            }
-            System.out.println();
-            System.out.println("Score: " + game.player.score + " Lives: " + game.player.lives);
-            if (game.player.lives == 0){
-                System.out.println("Game over");
-                break;
-            }
-        }
+
+        });
+
+
+
+        endGameButton.setOnAction(event -> {
+            primaryStage.close();
+        });
+
+
+        gameField.getChildren().addAll(testRuut);
+
+        gamePane.setRight(endGameButton);
+
+        gamePane.setTop(gameField);
+
+        startMenuVbox.getChildren().addAll(startGameButton);
+
+
+        primaryStage.setScene(startMenuScene);
+
+        primaryStage.show();
 
     }
 
@@ -178,6 +200,12 @@ public class Dodger {
                 }
                 System.out.println();
             }
+
+        }
+
+        public void drawGame(ObstacleSet obstacleSet, Player playe, Pane pane) {
+
+
 
         }
 
