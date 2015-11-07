@@ -1,74 +1,137 @@
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 //import java.util.Random;
 import java.util.Scanner;
+import java.util.StringJoiner;
 
 public class Dodger extends Application{
 
+    Stage gameStage = new Stage();
+    Label gameScore = new Label();
+    Game game;
 
 
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Game game = new Game();
+        setGameStage();
 
-        primaryStage.setTitle("Dodger");
+
+    }
+
+    private void setGameStage() {
+
+        gameStage.setOnCloseRequest(event1 -> {System.exit(0);}); // Just to make sure everything gets closed
+        gameStage.setTitle("i200Dodger");
+
+
+        drawStartMenu();
+        gameStage.show();
+
+    }
+
+    private void drawStartMenu() {
 
         VBox startMenuVbox = new VBox();
-        BorderPane gamePane = new BorderPane();
-        Pane gameField = new Pane();
         Scene startMenuScene = new Scene(startMenuVbox);
-        Scene gameScene = new Scene(gamePane);
         Button startGameButton = new Button("Start");
-        Button endGameButton = new Button("End");
-
-        Rectangle testRuut = new Rectangle(10, 100, 310, 310);
-
-        gameScene.setOnKeyPressed(event -> {
-            String input = event.getCharacter();
-            System.out.println(input);
-        });
-
-
+        Label manual = new Label("Use A, S nad D to control");
+        startMenuVbox.getChildren().addAll(manual, startGameButton);
 
         startGameButton.setOnAction(event -> {
-            System.out.println("test");
-            primaryStage.setScene(gameScene);
-
-
+            launchNewGame();
         });
 
+        gameStage.setScene(startMenuScene);
+    }
 
+    private void launchNewGame() {
 
-        endGameButton.setOnAction(event -> {
-            primaryStage.close();
-        });
+        game = new Game();
+        game.initiateGame(7, 5);
 
+        BorderPane gamePane = new BorderPane();
+        GridPane gameField = new GridPane();
+        Scene gameScene = new Scene(gamePane);
 
-        gameField.getChildren().addAll(testRuut);
+        Label scoreBoard = new Label("Lives: 3 Score: 0");
+
+        Button endGameButton = new Button("End");
 
         gamePane.setRight(endGameButton);
-
+        gamePane.setBottom(scoreBoard);
         gamePane.setTop(gameField);
 
-        startMenuVbox.getChildren().addAll(startGameButton);
+        game.drawGame(gameField);
+
+        gameStage.setScene(gameScene);
+        gameStage.show();
 
 
-        primaryStage.setScene(startMenuScene);
+        endGameButton.setOnAction(event2 -> {
+            gameStage.close();
+        });
 
-        primaryStage.show();
+        gameScene.setOnKeyPressed(keyEvent -> {  // Keyboard input for the game
+            String input;
+            input = keyEvent.getText();
+            System.out.println(input);
 
+            if (input.equals("a")){
+                game.player.movePlayer("left");
+                game.board.insertRow();
+                evaluateGame();
+                game.drawGame(gameField);
+            }
+
+            if (input.equals("d")){
+                game.player.movePlayer("right");
+                game.board.insertRow();
+                game.drawGame(gameField);
+            }
+
+            if (input.equals("s")) {
+                game.board.insertRow();
+                game.drawGame(gameField);
+            }
+
+        });
+
+    }
+
+    private void evaluateGame() {
+
+        if(true) {
+            game.player.lives--; //ToDo actual eval
+        }
+
+        if (game.player.lives == 0){
+            drawGameOverMenu();
+        }
+    }
+
+    private void drawGameOverMenu() {
+        VBox gameOverVbox = new VBox();
+        Scene gameOverScene = new Scene(gameOverVbox);
+        Button startGameButton = new Button("Start");
+        Label mocking = new Label("Game over. Try again.");
+        gameOverVbox.getChildren().addAll(mocking, startGameButton);
+
+        startGameButton.setOnAction(event -> {
+            launchNewGame();
+        });
+
+        gameStage.setScene(gameOverScene);
     }
 
     public static class Obstacle {
@@ -120,6 +183,9 @@ public class Dodger extends Application{
 
         }
 
+
+
+
         public void insertRow (){
 
             //first shift all existing objects one row down
@@ -134,11 +200,11 @@ public class Dodger extends Application{
             //insert new row
 
             for (int i = 0; i < obstacleSet[0].length; i++) {
-
-                if (((int) (Math.random()*2) == 0))
+                int obstacleType = (int) (Math.random()*2);
+                if ((obstacleType == 0))
                     obstacleSet[0][i].setColor("blue");
                 else
-                    obstacleSet[0][i].setColor("red ");
+                    obstacleSet[0][i].setColor("red");
             }
 
         }
@@ -172,7 +238,7 @@ public class Dodger extends Application{
 
     }
 
-    public static class Game {
+    public class Game {
 
         ObstacleSet board = new ObstacleSet();
         Player player = new Player();
@@ -181,6 +247,9 @@ public class Dodger extends Application{
 
             player.initiatePlayer(boardWidth);
             board.initiateObstacleSet(boardHeight, boardWidth);
+            board.insertRow();
+            board.insertRow();
+            board.insertRow();
 
         }
 
@@ -203,9 +272,26 @@ public class Dodger extends Application{
 
         }
 
-        public void drawGame(ObstacleSet obstacleSet, Player playe, Pane pane) {
+        public void drawGame (GridPane gameBoard){
 
+            for (int i = 0; i < board.obstacleSet.length ; i++) {
+                for (int j = 0; j < board.obstacleSet[0].length; j++) {
+                    Rectangle obstacleIcon = new Rectangle(50, 50);
+                    gameBoard.add(obstacleIcon, j, i);
+                    if (board.obstacleSet[i][j].color.equals("red")) obstacleIcon.setFill(Color.RED);
+                    if (board.obstacleSet[i][j].color.equals("blue")) obstacleIcon.setFill(Color.BLUE);
+                }
+                System.out.println();
+            }
 
+            
+            Rectangle playerIcon = new Rectangle(50,50);
+            playerIcon.setFill(Color.GREEN);
+
+                        
+            gameBoard.add(playerIcon, player.position, board.obstacleSet.length - 1);
+
+            gameScore.setText("Lives: " + game.player.lives + " Score: " + game.player.score);
 
         }
 
