@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,12 +14,15 @@ import javafx.scene.Scene;
 //import java.util.Random;
 import java.util.Scanner;
 import java.util.StringJoiner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Dodger extends Application{
 
     Stage gameStage = new Stage();
     Label gameScore = new Label();
     Game game;
+    Timer timer;
 
 
     @Override
@@ -29,6 +33,7 @@ public class Dodger extends Application{
 
     }
 
+    //opens the program window
     private void setGameStage() {
 
         gameStage.setOnCloseRequest(event1 -> {System.exit(0);}); // Just to make sure everything gets closed
@@ -60,16 +65,18 @@ public class Dodger extends Application{
         game = new Game();
         game.initiateGame(7, 5);
 
+
+
         BorderPane gamePane = new BorderPane();
         GridPane gameField = new GridPane();
         Scene gameScene = new Scene(gamePane);
 
-        Label scoreBoard = new Label("Lives: 3 Score: 0");
+        gameScore = new Label("Lives: 3 Score: 0");
 
         Button endGameButton = new Button("End");
 
         gamePane.setRight(endGameButton);
-        gamePane.setBottom(scoreBoard);
+        gamePane.setBottom(gameScore);
         gamePane.setTop(gameField);
 
         game.drawGame(gameField);
@@ -81,6 +88,10 @@ public class Dodger extends Application{
         endGameButton.setOnAction(event2 -> {
             gameStage.close();
         });
+
+
+        timer = new Timer();
+
 
         gameScene.setOnKeyPressed(keyEvent -> {  // Keyboard input for the game
             String input;
@@ -97,11 +108,13 @@ public class Dodger extends Application{
             if (input.equals("d")){
                 game.player.movePlayer("right");
                 game.board.insertRow();
+                evaluateGame();
                 game.drawGame(gameField);
             }
 
             if (input.equals("s")) {
                 game.board.insertRow();
+                evaluateGame();
                 game.drawGame(gameField);
             }
 
@@ -111,13 +124,17 @@ public class Dodger extends Application{
 
     private void evaluateGame() {
 
-        if(true) {
-            game.player.lives--; //ToDo actual eval
+        if(game.board.obstacleSet[game.board.obstacleSet.length-1][game.player.position].color.equals("red")) {
+            game.player.lives--;
         }
 
+        if(game.board.obstacleSet[game.board.obstacleSet.length-1][game.player.position].color.equals("blue")) {
+            game.player.score++;
+        }
         if (game.player.lives == 0){
             drawGameOverMenu();
         }
+
     }
 
     private void drawGameOverMenu() {
@@ -200,10 +217,10 @@ public class Dodger extends Application{
             //insert new row
 
             for (int i = 0; i < obstacleSet[0].length; i++) {
-                int obstacleType = (int) (Math.random()*2);
-                if ((obstacleType == 0))
+                int obstacleType = (int) (Math.random()*4);
+                if (obstacleType == 0)
                     obstacleSet[0][i].setColor("blue");
-                else
+                if(obstacleType == 1)
                     obstacleSet[0][i].setColor("red");
             }
 
@@ -281,7 +298,6 @@ public class Dodger extends Application{
                     if (board.obstacleSet[i][j].color.equals("red")) obstacleIcon.setFill(Color.RED);
                     if (board.obstacleSet[i][j].color.equals("blue")) obstacleIcon.setFill(Color.BLUE);
                 }
-                System.out.println();
             }
 
             
@@ -292,6 +308,10 @@ public class Dodger extends Application{
             gameBoard.add(playerIcon, player.position, board.obstacleSet.length - 1);
 
             gameScore.setText("Lives: " + game.player.lives + " Score: " + game.player.score);
+
+
+
+
 
         }
 
