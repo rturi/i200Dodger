@@ -1,5 +1,6 @@
 package i200Dodger;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Roland on 03/12/2015.
@@ -81,6 +83,14 @@ public class GameUI {
         gameStage.setScene(gameScene);
         gameStage.show();
 
+        Timer timer = new Timer();
+
+        int timerPeriod = 1000;
+
+
+        resetTimer(timer, timerPeriod, game, gameField);
+
+
         gameScene.setOnKeyPressed(keyEvent -> {  // Keyboard input for the game
             String input;
             input = keyEvent.getText();
@@ -97,6 +107,7 @@ public class GameUI {
                 game.movePlayerRight();
                 game.insertRow();
                 game.evaluateGame();
+                timer.cancel();
                 drawGame(gameField, game);
             }
 
@@ -105,6 +116,7 @@ public class GameUI {
                 game.evaluateGame();
                 drawGame(gameField, game);
             }
+
 
         });
 
@@ -118,7 +130,7 @@ public class GameUI {
         // When control keys are pressed insert row
 
         // Reset timer
-        
+
         // Draw board or game over
         // Game.evaluateGame(game);
         // Draw board or game over
@@ -151,6 +163,24 @@ public class GameUI {
         gameField.add(playerIcon, game.getPlayerPosition(), game.getBoardHeight() - 1);
 
 
+
+    }
+
+    private void resetTimer(Timer timer, int timerPeriod, Game game, GridPane gameField){
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        System.out.println("tick");
+                        game.insertRow();
+                        game.evaluateGame();
+                        drawGame(gameField,game);
+                    }
+                });
+            }
+        }, timerPeriod, timerPeriod);
 
     }
 
