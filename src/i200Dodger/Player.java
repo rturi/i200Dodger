@@ -33,7 +33,7 @@ public class Player {
         return score;
     }
 
-    public int lives(){
+    public int getLives(){
         return lives;
     }
 

@@ -7,7 +7,12 @@ public class Game {
 
     private int boardWidth;
     private int boardHeight;
+
+    private Player player;
+
     private Obstacle[][] obstacles;
+
+    private int score = 0;
 
     public Game (){
 
@@ -15,7 +20,7 @@ public class Game {
         boardWidth = 5;
 
         obstacles = initiateObstacles(7, 5);
-        Player player = new Player(boardWidth);
+        player = new Player(boardWidth);
         printGame(player,obstacles);
         System.out.println("test");
 
@@ -66,6 +71,10 @@ public class Game {
         }
     }
 
+    public void insertRow() {
+        insertRow(this.obstacles);
+    }
+
 
     /*Prints out the game board to the console*/
     public void printGame(Player player, Obstacle[][] obstacleSet){
@@ -86,4 +95,46 @@ public class Game {
 
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public int getLives() {
+        return player.getLives();
+    }
+
+    public Obstacle getObstacle(int row, int column){
+        return obstacles[row][column];
+    }
+
+    public int getBoardHeight() {
+        return boardHeight;
+    }
+
+    public int getBoardWidth() {
+        return boardWidth;
+    }
+
+    public int getPlayerPosition() {
+        return player.getPosition();
+    }
+
+    /* Looks at the obstacles and player and changes the score and/or lives if needed */
+    public  void evaluateGame() {
+        if(this.getObstacle(this.getBoardHeight()-1, this.player.getPosition()).getColor().equals("red")) {
+            this.player.reduceLives();
+        }
+
+        if(this.getObstacle(this.getBoardHeight()-1, this.player.getPosition()).getColor().equals("blue")) {
+            this.player.increaseScore();
+        }
+    }
+
+    public void movePlayerLeft() {
+        player.movePlayer("left");
+    }
+
+    public void movePlayerRight() {
+        player.movePlayer("right");
+    }
 }

@@ -10,7 +10,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Game game = new Game();
-        System.exit(0);
+        GameUI gameUI = new GameUI();
+        //System.exit(0);
     }
 }
