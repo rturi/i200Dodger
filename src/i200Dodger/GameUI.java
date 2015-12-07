@@ -65,7 +65,7 @@ public class GameUI {
         BorderPane gamePane = new BorderPane();
         GridPane gameField = new GridPane();
         Scene gameScene = new Scene(gamePane);
-        Label gameScore = new Label("Lives: " + game.getLives() + "Score: " + game.getScore());
+        Label scoreBoard = new Label("Lives: " + game.getLives() + "Score: " + game.getScore());
 
         Button endGameButton = new Button("End");
 
@@ -75,7 +75,7 @@ public class GameUI {
 
 
         gamePane.setRight(endGameButton);
-        gamePane.setBottom(gameScore);
+        gamePane.setBottom(scoreBoard);
         gamePane.setTop(gameField);
 
         drawGame(gameField, game);
@@ -83,12 +83,12 @@ public class GameUI {
         gameStage.setScene(gameScene);
         gameStage.show();
 
-        Timer timer = new Timer();
+        Timer activeTimer = new Timer();
 
         int timerPeriod = 1000;
 
 
-        resetTimer(timer, timerPeriod, game, gameField);
+        setTimer(game, gameField, scoreBoard);
 
 
         gameScene.setOnKeyPressed(keyEvent -> {  // Keyboard input for the game
@@ -100,6 +100,7 @@ public class GameUI {
                 game.movePlayerLeft();
                 game.insertRow();
                 game.evaluateGame();
+                updateScoreBoard(scoreBoard, game);
                 drawGame(gameField, game);
             }
 
@@ -107,39 +108,28 @@ public class GameUI {
                 game.movePlayerRight();
                 game.insertRow();
                 game.evaluateGame();
-                timer.cancel();
+                updateScoreBoard(scoreBoard, game);
                 drawGame(gameField, game);
+                drawGameOverMenu();
             }
 
             if (input.equals("s")) {
                 game.insertRow();
                 game.evaluateGame();
+                updateScoreBoard(scoreBoard, game);
                 drawGame(gameField, game);
             }
 
 
         });
 
+        // ToDo: game over
 
+    }
 
-
-        // Initiate timer
-        // Listen to keyboard
-
-        // When timer runs out insert row
-        // When control keys are pressed insert row
-
-        // Reset timer
-
-        // Draw board or game over
-        // Game.evaluateGame(game);
-        // Draw board or game over
-
-
-
-
-
-
+    private void updateScoreBoard(Label scoreBoard, Game game) {
+        scoreBoard.setText("Lives: " + game.getLives() + "Score: " + game.getScore());
+        System.out.println("score " + game.getScore());
     }
 
     private void drawGame(GridPane gameField, Game game) {
@@ -166,22 +156,43 @@ public class GameUI {
 
     }
 
-    private void resetTimer(Timer timer, int timerPeriod, Game game, GridPane gameField){
+    private void setTimer(Game game, GridPane gameField, Label scoreBoard){
 
-        timer.scheduleAtFixedRate(new TimerTask() {
+
+        Timer timer = new Timer();
+
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(new Runnable() {
                     public void run() {
-                        System.out.println("tick");
                         game.insertRow();
                         game.evaluateGame();
                         drawGame(gameField,game);
+                        updateScoreBoard(scoreBoard, game);
+                        game.increaseLevel();
+                        setTimer(game, gameField, scoreBoard);
                     }
                 });
             }
-        }, timerPeriod, timerPeriod);
+        }, 2000 - 100*game.getLevel());
+        //ToDo: avoid negative delays
 
+    }
+
+    private void drawGameOverMenu() {
+        // ToDO: kill all timers when qame is over
+        VBox gameOverVbox = new VBox();
+        Scene gameOverScene = new Scene(gameOverVbox);
+        Button startGameButton = new Button("Start");
+        Label mocking = new Label("Game over. Try again.");
+        gameOverVbox.getChildren().addAll(mocking, startGameButton);
+
+        startGameButton.setOnAction(event -> {
+            launchNewGame();
+        });
+
+        gameStage.setScene(gameOverScene);
     }
 
 }

@@ -7,6 +7,7 @@ public class Game {
 
     private int boardWidth;
     private int boardHeight;
+    private int level = 0;
 
     private Player player;
 
@@ -120,13 +121,14 @@ public class Game {
     }
 
     /* Looks at the obstacles and player and changes the score and/or lives if needed */
-    public  void evaluateGame() {
-        if(this.getObstacle(this.getBoardHeight()-1, this.player.getPosition()).getColor().equals("red")) {
-            this.player.reduceLives();
+    public void evaluateGame() {
+
+        if(getObstacle(this.getBoardHeight()-1, this.player.getPosition()).getColor().equals("red")) {
+            player.reduceLives();
         }
 
         if(this.getObstacle(this.getBoardHeight()-1, this.player.getPosition()).getColor().equals("blue")) {
-            this.player.increaseScore();
+            score++;
         }
     }
 
@@ -136,5 +138,14 @@ public class Game {
 
     public void movePlayerRight() {
         player.movePlayer("right");
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void increaseLevel() {
+        if (level < 18) level++;
+        //ToDo: find a more elegant way to avoid negative timer delays
     }
 }
