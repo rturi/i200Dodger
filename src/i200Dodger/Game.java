@@ -52,6 +52,9 @@ public class Game {
 
     private void insertRow(Obstacle[][] obstacles) {
 
+        // ToDo: check if there is a nonnegative choice for the player
+        // ToDo: take the game lavel into account when inserting rows (start with more greens than reds etc.)
+
         //first shift all existing objects one row down
 
         for (int i = obstacles.length - 1; i > 0  ; i--) {

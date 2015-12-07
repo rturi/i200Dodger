@@ -83,19 +83,15 @@ public class GameUI {
         gameStage.setScene(gameScene);
         gameStage.show();
 
-        Timer activeTimer = new Timer();
-
-        int timerPeriod = 1000;
-
-
         setTimer(game, gameField, scoreBoard);
-
 
         gameScene.setOnKeyPressed(keyEvent -> {  // Keyboard input for the game
             String input;
             input = keyEvent.getText();
             System.out.println(input);
 
+
+            // ToDo: implement isGameOver();
             if (input.equals("a")){
                 game.movePlayerLeft();
                 game.insertRow();
@@ -110,7 +106,6 @@ public class GameUI {
                 game.evaluateGame();
                 updateScoreBoard(scoreBoard, game);
                 drawGame(gameField, game);
-                drawGameOverMenu();
             }
 
             if (input.equals("s")) {
@@ -124,12 +119,15 @@ public class GameUI {
         });
 
         // ToDo: game over
-
+        // ToDo: settings
+        // ToDo: high scores
+        // ToDo: pause
     }
 
     private void updateScoreBoard(Label scoreBoard, Game game) {
         scoreBoard.setText("Lives: " + game.getLives() + "Score: " + game.getScore());
         System.out.println("score " + game.getScore());
+        System.out.println("lives " + game.getLives());
     }
 
     private void drawGame(GridPane gameField, Game game) {
@@ -171,17 +169,17 @@ public class GameUI {
                         drawGame(gameField,game);
                         updateScoreBoard(scoreBoard, game);
                         game.increaseLevel();
-                        setTimer(game, gameField, scoreBoard);
+                        if (game.getLives() > 0) setTimer(game, gameField, scoreBoard); // new timer starts only when the game is not over
                     }
                 });
             }
         }, 2000 - 100*game.getLevel());
-        //ToDo: avoid negative delays
+        // ToDo: less ugly way to avoid negative delays
+        // ToDo: reset the timer when player ASDs
 
     }
 
     private void drawGameOverMenu() {
-        // ToDO: kill all timers when qame is over
         VBox gameOverVbox = new VBox();
         Scene gameOverScene = new Scene(gameOverVbox);
         Button startGameButton = new Button("Start");
