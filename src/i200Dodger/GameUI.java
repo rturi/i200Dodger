@@ -19,7 +19,8 @@ import java.util.TimerTask;
  */
 public class GameUI {
 
-    Stage gameStage;
+    private Stage gameStage;
+    private Label scoreBoard; // globalish so that
 
     public GameUI (){
 
@@ -65,7 +66,8 @@ public class GameUI {
         BorderPane gamePane = new BorderPane();
         GridPane gameField = new GridPane();
         Scene gameScene = new Scene(gamePane);
-        Label scoreBoard = new Label("Lives: " + game.getLives() + "Score: " + game.getScore());
+
+        scoreBoard = new Label("Lives: " + game.getLives() + "Score: " + game.getScore());
 
         Button endGameButton = new Button("End");
 
@@ -83,48 +85,45 @@ public class GameUI {
         gameStage.setScene(gameScene);
         gameStage.show();
 
-        setTimer(game, gameField, scoreBoard);
+        setTimer(game, gameField);
 
         gameScene.setOnKeyPressed(keyEvent -> {  // Keyboard input for the game
             String input;
             input = keyEvent.getText();
             System.out.println(input);
 
-
-            // ToDo: implement isGameOver();
             if (input.equals("a")){
                 game.movePlayerLeft();
-                game.insertRow();
+                game.insertRow(game);
                 game.evaluateGame();
-                updateScoreBoard(scoreBoard, game);
+                if(game.isGameOver(game)) drawGameOverMenu(game);
+                updateScoreBoard(game);
                 drawGame(gameField, game);
             }
 
             if (input.equals("d")){
                 game.movePlayerRight();
-                game.insertRow();
+                game.insertRow(game);
                 game.evaluateGame();
-                updateScoreBoard(scoreBoard, game);
+                if(game.isGameOver(game)) drawGameOverMenu(game);
+                updateScoreBoard(game);
                 drawGame(gameField, game);
             }
 
             if (input.equals("s")) {
-                game.insertRow();
+                game.insertRow(game);
                 game.evaluateGame();
-                updateScoreBoard(scoreBoard, game);
+                if(game.isGameOver(game)) drawGameOverMenu(game);
+                updateScoreBoard(game);
                 drawGame(gameField, game);
             }
 
 
         });
 
-        // ToDo: game over
-        // ToDo: settings
-        // ToDo: high scores
-        // ToDo: pause
     }
 
-    private void updateScoreBoard(Label scoreBoard, Game game) {
+    private void updateScoreBoard(Game game) {
         scoreBoard.setText("Lives: " + game.getLives() + "Score: " + game.getScore());
         System.out.println("score " + game.getScore());
         System.out.println("lives " + game.getLives());
@@ -132,8 +131,8 @@ public class GameUI {
 
     private void drawGame(GridPane gameField, Game game) {
 
-
-
+        // Loop goes throug the board grid cell by cell and if the obstacle in the corresponding game board is red or blue
+        // inserts a rectangle of an appropriate color
         for (int i = 0; i < game.getBoardHeight(); i++) {
             for (int j = 0; j < game.getBoardWidth(); j++) {
                 Rectangle obstacleIcon = new Rectangle(50, 50);
@@ -143,19 +142,18 @@ public class GameUI {
             }
         }
 
-
+        // Finally add the player icon. If there was an obstacle in the same position, the player icon covers it.
         Rectangle playerIcon = new Rectangle(50,50);
         playerIcon.setFill(Color.GREEN);
-
-
         gameField.add(playerIcon, game.getPlayerPosition(), game.getBoardHeight() - 1);
-
-
 
     }
 
-    private void setTimer(Game game, GridPane gameField, Label scoreBoard){
+    private void setTimer(Game game, GridPane gameField){
 
+        /* Takes in:
+            - Game (to insert a new row if the timer runs out and
+        * */
 
         Timer timer = new Timer();
 
@@ -164,26 +162,25 @@ public class GameUI {
             public void run() {
                 Platform.runLater(new Runnable() {
                     public void run() {
-                        game.insertRow();
+                        //game.insertRow(game);
                         game.evaluateGame();
+                        if(game.isGameOver(game)) drawGameOverMenu(game);
                         drawGame(gameField,game);
-                        updateScoreBoard(scoreBoard, game);
+                        updateScoreBoard(game);
                         game.increaseLevel();
-                        if (game.getLives() > 0) setTimer(game, gameField, scoreBoard); // new timer starts only when the game is not over
+                        if (game.getLives() > 0) setTimer(game, gameField); // new timer starts only when the game is not over
                     }
                 });
             }
-        }, 2000 - 100*game.getLevel());
-        // ToDo: less ugly way to avoid negative delays
-        // ToDo: reset the timer when player ASDs
+        }, 1500);
 
     }
 
-    private void drawGameOverMenu() {
+    private void drawGameOverMenu(Game game) {
         VBox gameOverVbox = new VBox();
         Scene gameOverScene = new Scene(gameOverVbox);
         Button startGameButton = new Button("Start");
-        Label mocking = new Label("Game over. Try again.");
+        Label mocking = new Label("Game over. Your score was " + game.getScore() + ". Try again.");
         gameOverVbox.getChildren().addAll(mocking, startGameButton);
 
         startGameButton.setOnAction(event -> {
