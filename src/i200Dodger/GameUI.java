@@ -168,7 +168,7 @@ public class GameUI {
                         drawGame(gameField,game);
                         updateScoreBoard(game);
                         game.increaseLevel();
-                        if (game.getLives() > 0) setTimer(game, gameField); // new timer starts only when the game is not over
+                        //if (game.getLives() > 0) setTimer(game, gameField); // new timer starts only when the game is not over
                     }
                 });
             }

@@ -53,6 +53,7 @@ public class Game {
                 obstacles[0][i].setColor("blue");
             if(obstacleType == 1)
                 obstacles[0][i].setColor("red");
+            System.out.println("genereerisin uue rea");
         }
     }
 
@@ -68,13 +69,13 @@ public class Game {
         }
 
         //generate obstacles for the new top row
-        generateNewTopRow();
 
+        game.generateNewTopRow();
 
         // Check if there is a nonnegative choice for the player with the new top row
         while(!hasNonNegativeChoice(game, (game.getBoardHeight() - 1), game.getPlayerPosition())){
-            generateNewTopRow();
-
+            game.generateNewTopRow();
+            printGame(player,obstacles);
         }
     }
 
@@ -86,14 +87,12 @@ public class Game {
         if (row == 1){
 
             if (column == 0) {
-               return (isNonNegativeObstacle(0, column) || (isNonNegativeObstacle(0, (column + 1))) );
+               return (isNonNegativeObstacle(0, 0) || (isNonNegativeObstacle(0, 1)));
             }
 
             if (column == (game.getBoardWidth() - 1)){
-                return (isNonNegativeObstacle(0, (column -1)) || (isNonNegativeObstacle(0, (column))) );
+                return (isNonNegativeObstacle(0, (column - 1)) || (isNonNegativeObstacle(0, (column))));
             }
-
-
             return (isNonNegativeObstacle(0, (column -1)) || (isNonNegativeObstacle(0, (column))) || (isNonNegativeObstacle(0, (column + 1))));
 
         }
