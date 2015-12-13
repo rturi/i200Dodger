@@ -26,18 +26,14 @@ public class Game {
 
         insertRow(this);
 
-        printGame(player,obstacles);
-
     }
 
-    /* Sets up the board with the first row of obstacles */
     private Obstacle [][] initiateObstacles (int boardHeight, int boardWidth){
 
         obstacles = new Obstacle[boardHeight][boardWidth];
 
         /* Set up the board with blank obstacles */
         for (int i = 0; i < boardHeight ; i++) {
-
             for (int j = 0; j < boardWidth; j++) {
                 obstacles[i][j] = new Obstacle();
                 obstacles[i][j].setColor("____");
@@ -53,8 +49,12 @@ public class Game {
                 obstacles[0][i].setColor("blue");
             if(obstacleType == 1)
                 obstacles[0][i].setColor("red");
-            System.out.println("genereerisin uue rea");
+            if(obstacleType > 2)
+                obstacles[0][i].setColor("____");
         }
+            System.out.println();
+            System.out.println("generated a new row");
+            printGame(player,obstacles);
     }
 
     public void insertRow(Game game) {
@@ -73,47 +73,54 @@ public class Game {
         game.generateNewTopRow();
 
         // Check if there is a nonnegative choice for the player with the new top row
-        while(!hasNonNegativeChoice(game, (game.getBoardHeight() - 1), game.getPlayerPosition())){
+        int test = 0;
+        while(!hasNonNegativeChoice(game, (game.getBoardHeight() - 1), game.getPlayerPosition()) && test < 500){
             game.generateNewTopRow();
-            printGame(player,obstacles);
+
+            test++;
+            if (test > 495) System.out.println("test: " + test);
+            for (int i = 0; i < game.getBoardWidth(); i++) {
+                obstacles[0][i].setColor("____");
+            }
         }
     }
 
 
     private boolean hasNonNegativeChoice(Game game, int row, int column){
 
-        System.out.println("row: " + row + " column: " + column);
+        //System.out.println("start hasNonNegativeChoice row: " + row + " column: " + column);
 
-        if (row == 1){
+        boolean leftOK = false;
+        boolean forwardOK = false;
+        boolean rightOK = false;
 
-            if (column == 0) {
-               return (isNonNegativeObstacle(0, 0) || (isNonNegativeObstacle(0, 1)));
+        if (row == 1) {
+            System.out.println("reaches last row check");
+            if (column != 0) leftOK = isNonNegativeObstacle(0, (column - 1));
+            forwardOK = isNonNegativeObstacle(0, column);
+            if (column != (game.getBoardWidth() - 1)) rightOK = isNonNegativeObstacle(0, (column + 1));
+        } else {
+            if (column != 0 && isNonNegativeObstacle((row - 1), (column - 1))) {
+                //System.out.println("goin' left " + row + " " + column);
+                leftOK = hasNonNegativeChoice(game, (row - 1), (column - 1));
             }
-
-            if (column == (game.getBoardWidth() - 1)){
-                return (isNonNegativeObstacle(0, (column - 1)) || (isNonNegativeObstacle(0, (column))));
+            if (column != 0 && column != (game.getBoardWidth() - 1) && isNonNegativeObstacle((row - 1), (column))) {
+                //System.out.println("goin' straight on " + row + " " + column);
+                forwardOK = hasNonNegativeChoice(game, (row - 1), (column));
             }
-            return (isNonNegativeObstacle(0, (column -1)) || (isNonNegativeObstacle(0, (column))) || (isNonNegativeObstacle(0, (column + 1))));
-
+            if (column != (game.getBoardWidth() - 1) && isNonNegativeObstacle((row - 1), (column + 1))) {
+                //System.out.println("goin' right " + row + " " + column);
+                rightOK = hasNonNegativeChoice(game, (row - 1), (column + 1));
+            }
         }
 
-        if(column == 0) {
+        //System.out.println("end hasNonNegativeChoice row: " + row + " column: " + column + " leftOK: " + leftOK + " forwardOK " + forwardOK + " rightOK " + rightOK);
 
-            return (hasNonNegativeChoice(game, (row - 1), column) || hasNonNegativeChoice(game, (row - 1), (column + 1)));
-        }
-
-        if (column == (game.getBoardWidth() - 1)){
-
-            return (hasNonNegativeChoice(game, (row - 1), (column - 1)) || hasNonNegativeChoice(game, (row - 1), column));
-        }
-
-        return (hasNonNegativeChoice(game, (row - 1), (column - 1)) || hasNonNegativeChoice(game, (row - 1), column) || hasNonNegativeChoice(game, (row - 1), (column + 1)));
+        return (leftOK || forwardOK || rightOK);
     }
 
     /*Prints out the game board to the console*/
     public void printGame(Player player, Obstacle[][] obstacleSet){
-
-        System.out.println(player.getColor());
 
         for (int i = 0; i < obstacleSet.length ; i++) {
             for (int j = 0; j < obstacleSet[0].length; j++) {
@@ -126,6 +133,7 @@ public class Game {
             }
             System.out.println();
         }
+            System.out.println();
 
     }
 
@@ -165,8 +173,6 @@ public class Game {
         }
     }
 
-
-
     public void movePlayerLeft() {
         player.movePlayer("left");
     }
@@ -192,7 +198,11 @@ public class Game {
 
     private boolean isNonNegativeObstacle (int row, int column){
 
-        if (obstacles[row][column].getColor() != "red") return true;
+        //System.out.println("viewing obstacle " + row + " " + column + " and it's " + obstacles[row][column].getColor());
+
+        if (obstacles[row][column].getColor() != "red") {
+            return true;
+        }
 
         return false;
     }
