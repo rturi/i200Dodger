@@ -52,9 +52,8 @@ public class Game {
             if(obstacleType > 2)
                 obstacles[0][i].setColor("____");
         }
-            System.out.println();
-            System.out.println("generated a new row");
-            printGame(player,obstacles);
+            //System.out.println("generated a new row");
+            //printGame(player,obstacles);
     }
 
     public void insertRow(Game game) {
@@ -74,11 +73,11 @@ public class Game {
 
         // Check if there is a nonnegative choice for the player with the new top row
         int test = 0;
-        while(!hasNonNegativeChoice(game, (game.getBoardHeight() - 1), game.getPlayerPosition()) && test < 500){
+        while(!hasNonNegativeChoice(game, (game.getBoardHeight() - 1), game.getPlayerPosition()) && test < 300){
             game.generateNewTopRow();
 
             test++;
-            if (test > 495) System.out.println("test: " + test);
+            if (test > 295) System.out.println("test: " + test);
             for (int i = 0; i < game.getBoardWidth(); i++) {
                 obstacles[0][i].setColor("____");
             }
@@ -95,7 +94,6 @@ public class Game {
         boolean rightOK = false;
 
         if (row == 1) {
-            System.out.println("reaches last row check");
             if (column != 0) leftOK = isNonNegativeObstacle(0, (column - 1));
             forwardOK = isNonNegativeObstacle(0, column);
             if (column != (game.getBoardWidth() - 1)) rightOK = isNonNegativeObstacle(0, (column + 1));
@@ -186,7 +184,8 @@ public class Game {
     }
 
     public void increaseLevel() {
-        if (level < 18) level++;
+        level++;
+        System.out.println("new level:" + level);
     }
 
     public boolean isGameOver(Game game) {

@@ -125,8 +125,6 @@ public class GameUI {
 
     private void updateScoreBoard(Game game) {
         scoreBoard.setText("Lives: " + game.getLives() + "Score: " + game.getScore());
-        System.out.println("score " + game.getScore());
-        System.out.println("lives " + game.getLives());
     }
 
     private void drawGame(GridPane gameField, Game game) {
@@ -162,17 +160,16 @@ public class GameUI {
             public void run() {
                 Platform.runLater(new Runnable() {
                     public void run() {
-                        //game.insertRow(game);
+                        game.insertRow(game);
                         game.evaluateGame();
                         if(game.isGameOver(game)) drawGameOverMenu(game);
                         drawGame(gameField,game);
                         updateScoreBoard(game);
-                        game.increaseLevel();
-                        //if (game.getLives() > 0) setTimer(game, gameField); // new timer starts only when the game is not over
+                        if (game.getLives() > 0) setTimer(game, gameField); // new timer starts only when the game is not over
                     }
                 });
             }
-        }, 1500);
+        }, 500 - game.getScore()*3);
 
     }
 
