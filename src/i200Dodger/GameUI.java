@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -48,14 +49,68 @@ public class GameUI {
         VBox startMenuVbox = new VBox();
         Scene startMenuScene = new Scene(startMenuVbox);
         Button startGameButton = new Button("Start");
+        Button settingsButton = new Button("Settings");
         Label manual = new Label("Use A, S nad D to control");
-        startMenuVbox.getChildren().addAll(manual, startGameButton);
+        startMenuVbox.getChildren().addAll(manual, startGameButton, settingsButton);
 
         startGameButton.setOnAction(event -> {
             launchNewGame();
         });
 
+        settingsButton.setOnAction(event -> {
+            drawSettingsMenu();
+        });
+
         gameStage.setScene(startMenuScene);
+    }
+
+    private void drawSettingsMenu() {
+        VBox settingsMenuVbox = new VBox();
+        Scene settingsMenuScene = new Scene(settingsMenuVbox);
+        Button backToStartMenuButton = new Button("Back");
+        Label horizontalSizeLabel = new Label("columns");
+        Slider horizontalSlider = new Slider(2,20,5);
+        Label verticalSizeLabel = new Label("rows");
+        Slider verticalSizeSlider = new Slider(2,20,8);
+        Label sampleBoardLabel = new Label("Sample board");
+        GridPane gameField = new GridPane();
+
+        int sampleBoardWidth = 5;
+        int boardHeight = 8;
+
+        Game game = new Game();
+        for (int i = 0; i < (int) 8; i++) {
+            game.insertRow(game);
+        }
+        drawGame(gameField, game);
+        gameStage.show();
+
+
+        horizontalSlider.valueProperty().addListener((observable, oldSliderValue, newSliderValue) -> {
+
+            game.setBoardWidth(newSliderValue.intValue());
+            for (int i = 0; i < newSliderValue.intValue(); i++) {
+                game.insertRow(game);
+            }
+            drawGame(gameField, game);
+            gameStage.show();
+        });
+
+
+        verticalSizeSlider.valueProperty().addListener((observable, oldSliderValue, newSliderValue) -> {
+
+            game.setBoardHeight(newSliderValue.intValue());
+            for (int i = 0; i < newSliderValue.intValue(); i++) {
+                game.insertRow(game);
+            }
+            drawGame(gameField, game);
+            gameStage.show();
+        });
+
+        settingsMenuVbox.getChildren().addAll(backToStartMenuButton, horizontalSizeLabel, horizontalSlider, verticalSizeLabel, verticalSizeSlider, sampleBoardLabel,gameField);
+
+
+        gameStage.setScene(settingsMenuScene);
     }
 
     private void launchNewGame() {

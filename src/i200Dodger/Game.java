@@ -22,13 +22,13 @@ public class Game {
 
         player = new Player(boardWidth);
 
-        obstacles = initiateObstacles(boardHeight, boardWidth);
+        obstacles = initilizeObstacles(boardHeight, boardWidth);
 
         insertRow(this);
 
     }
 
-    private Obstacle [][] initiateObstacles (int boardHeight, int boardWidth){
+    private Obstacle [][] initilizeObstacles (int boardHeight, int boardWidth){
 
         obstacles = new Obstacle[boardHeight][boardWidth];
 
@@ -207,4 +207,11 @@ public class Game {
     }
 
 
+    public void setBoardHeight(int boardHeight) {
+        this.boardHeight = boardHeight;
+    }
+
+    public void setBoardWidth(int boardWidth) {
+        this.boardWidth = boardWidth;
+    }
 }
