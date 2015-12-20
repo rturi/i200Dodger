@@ -10,8 +10,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Settings.setBoardWidth(5);
-        Settings.setBoardHeight(9);
+        HighScores.testDBConnecion();
         GameUI gameUI = new GameUI();
         //System.exit(0);
     }
