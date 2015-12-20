@@ -1,0 +1,2 @@
+boardWidth:9
+boardHeight:8

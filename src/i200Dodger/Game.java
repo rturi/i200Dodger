@@ -17,8 +17,8 @@ public class Game {
 
     public Game (){
 
-        boardHeight = 7;
-        boardWidth = 5;
+        boardHeight = Settings.getBoardHeight();
+        boardWidth = Settings.getBoardWidth();
 
         player = new Player(boardWidth);
 
@@ -190,7 +190,7 @@ public class Game {
 
     public boolean isGameOver(Game game) {
 
-        if(game.getLives() <= 0) return true;
+        if(game.getLives() < 0) return true;
 
         return false;
     }

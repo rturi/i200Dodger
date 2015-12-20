@@ -69,14 +69,22 @@ public class GameUI {
         Scene settingsMenuScene = new Scene(settingsMenuVbox);
         Button backToStartMenuButton = new Button("Back");
         Label horizontalSizeLabel = new Label("columns");
-        Slider horizontalSlider = new Slider(2,20,5);
+        Slider horizontalSlider = new Slider(2,10,5);
         Label verticalSizeLabel = new Label("rows");
-        Slider verticalSizeSlider = new Slider(2,20,8);
+        Slider verticalSizeSlider = new Slider(2,10,8);
         Label sampleBoardLabel = new Label("Sample board");
         GridPane gameField = new GridPane();
 
         int sampleBoardWidth = 5;
-        int boardHeight = 8;
+        int sampleBoardHeight = 8;
+
+        horizontalSlider.setShowTickLabels(true);
+        horizontalSlider.setMinorTickCount(1);
+        horizontalSlider.setMajorTickUnit(2);
+        horizontalSlider.setSnapToTicks(true);
+
+        verticalSizeSlider.setShowTickLabels(true);
+        verticalSizeSlider.setSnapToTicks(true);
 
         Game game = new Game();
         for (int i = 0; i < (int) 8; i++) {
@@ -89,6 +97,7 @@ public class GameUI {
         horizontalSlider.valueProperty().addListener((observable, oldSliderValue, newSliderValue) -> {
 
             game.setBoardWidth(newSliderValue.intValue());
+
             for (int i = 0; i < newSliderValue.intValue(); i++) {
                 game.insertRow(game);
             }
@@ -186,9 +195,12 @@ public class GameUI {
 
         // Loop goes throug the board grid cell by cell and if the obstacle in the corresponding game board is red or blue
         // inserts a rectangle of an appropriate color
+
+        int obstacleSideLength = (int) 400/Math.max(game.getBoardHeight(), game.getBoardWidth());
+
         for (int i = 0; i < game.getBoardHeight(); i++) {
             for (int j = 0; j < game.getBoardWidth(); j++) {
-                Rectangle obstacleIcon = new Rectangle(50, 50);
+                Rectangle obstacleIcon = new Rectangle(obstacleSideLength, obstacleSideLength);
                 gameField.add(obstacleIcon, j, i);
                 if (game.getObstacle(i,j).getColor().equals("red")) obstacleIcon.setFill(Color.RED);
                 if (game.getObstacle(i,j).getColor().equals("blue")) obstacleIcon.setFill(Color.BLUE);
@@ -196,9 +208,11 @@ public class GameUI {
         }
 
         // Finally add the player icon. If there was an obstacle in the same position, the player icon covers it.
-        Rectangle playerIcon = new Rectangle(50,50);
+        Rectangle playerIcon = new Rectangle(obstacleSideLength,obstacleSideLength);
         playerIcon.setFill(Color.GREEN);
         gameField.add(playerIcon, game.getPlayerPosition(), game.getBoardHeight() - 1);
+
+
 
     }
 
@@ -220,7 +234,7 @@ public class GameUI {
                         if(game.isGameOver(game)) drawGameOverMenu(game);
                         drawGame(gameField,game);
                         updateScoreBoard(game);
-                        if (game.getLives() > 0) setTimer(game, gameField); // new timer starts only when the game is not over
+                        if (!game.isGameOver(game)) setTimer(game, gameField); // new timer starts only when the game is not over
                     }
                 });
             }
