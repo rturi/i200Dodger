@@ -10,7 +10,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        HighScores.testDBConnecion();
         GameUI gameUI = new GameUI();
         //System.exit(0);
     }

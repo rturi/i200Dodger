@@ -24,7 +24,7 @@ public class Game {
 
         obstacles = initilizeObstacles(boardHeight, boardWidth);
 
-        insertRow(this);
+        this.insertRow();
 
     }
 
@@ -56,7 +56,7 @@ public class Game {
             //printGame(player,obstacles);
     }
 
-    public void insertRow(Game game) {
+    public void insertRow() {
 
         //first shift all existing obstacles one row down
 
@@ -69,19 +69,19 @@ public class Game {
 
         //generate obstacles for the new top row
 
-        game.generateNewTopRow();
+        this.generateNewTopRow();
 
         // Check if there is a nonnegative choice for the player with the new top row
         int test = 0;
-        while(!hasNonNegativeChoice(game, (game.getBoardHeight() - 1), game.getPlayerPosition()) && test < 300){
-            game.generateNewTopRow();
+        while(!hasNonNegativeChoice(this, (this.getBoardHeight() - 1), this.getPlayerPosition()) && test < 300){
+            this.generateNewTopRow();
 
             test++;
-            if (test > 295) System.out.println("test: " + test);
-            for (int i = 0; i < game.getBoardWidth(); i++) {
+            /*if (test > 295) System.out.println("test: " + test);
+            for (int i = 0; i < this.getBoardWidth(); i++) {
                 obstacles[0][i].setColor("____");
             }
-        }
+*/        }
     }
 
 
@@ -188,9 +188,9 @@ public class Game {
         System.out.println("new level:" + level);
     }
 
-    public boolean isGameOver(Game game) {
+    public boolean isGameOver() {
 
-        if(game.getLives() < 0) return true;
+        if(this.getLives() < 0) return true;
 
         return false;
     }

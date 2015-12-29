@@ -37,7 +37,7 @@ public class Settings {
             e.printStackTrace();
         }
 
-        return 5;
+        return 5; // returns a sensible value, if reading from file fails
     }
 
     public static int getBoardHeight(){
@@ -69,10 +69,12 @@ public class Settings {
             e.printStackTrace();
         }
 
-        return 8;
+        return 8; // returns a sensible value, if reading from file fails
     }
 
     public static void setBoardWidth(int newBoardWidth) {
+
+        System.out.println("starting width change.. old value " + getBoardWidth());
 
         File oldSettingsFile = new File(System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings.txt");
         File newSettingsFile = new File(System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings_tmp.txt");
@@ -93,7 +95,6 @@ public class Settings {
         String line = null;
         try {
             line = reader.readLine();
-            System.out.println(line);
             while (line != null) {
                 String[] workerLine = line.split(":");
                 if (workerLine[0].equals("boardWidth")) {
@@ -151,10 +152,13 @@ public class Settings {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        System.out.println("new width " + getBoardWidth());
     }
 
     public static void setBoardHeight(int newBoardHeight) {
+
+        System.out.println("starting height change.. old value " + getBoardHeight());
+
         File oldSettingsFile = new File(System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings.txt");
         File newSettingsFile = new File(System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings_tmp.txt");
 
@@ -174,11 +178,10 @@ public class Settings {
         String line = null;
         try {
             line = reader.readLine();
-            System.out.println(line);
             while (line != null) {
                 String[] workerLine = line.split(":");
-                if (workerLine[0].equals("boardWidth")) {
-                    writer.write("boardWidth:" + newBoardHeight + "\r\n");
+                if (workerLine[0].equals("boardHeight")) {
+                    writer.write("boardHeight:" + newBoardHeight + "\r\n");
                 } else
                     writer.write(line + "\r\n");
                 line = reader.readLine();
@@ -232,5 +235,7 @@ public class Settings {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println("new value " + getBoardHeight());
     }
 }

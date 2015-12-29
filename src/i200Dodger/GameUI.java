@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -18,17 +19,16 @@ import java.util.TimerTask;
 /**
  * Created by Roland on 03/12/2015.
  */
+
 public class GameUI {
 
     private Stage gameStage;
-    private Label scoreBoard; // globalish so that
+    private Label scoreBoard; // globalish so that it could be updated from both launchGame() and updateTimer()
 
     public GameUI (){
 
         gameStage = new Stage();
-
         setGameStage();
-
         drawStartMenu();
 
     }
@@ -37,7 +37,6 @@ public class GameUI {
 
         gameStage.setOnCloseRequest(event1 -> {System.exit(0);}); // Just to make sure everything gets closed
         gameStage.setTitle("i200Dodger");
-
 
         drawStartMenu();
         gameStage.show();
@@ -48,9 +47,10 @@ public class GameUI {
 
         VBox startMenuVbox = new VBox();
         Scene startMenuScene = new Scene(startMenuVbox);
-        Button startGameButton = new Button("Start");
+        Button startGameButton = new Button("Start game");
         Button settingsButton = new Button("Settings");
-        Label manual = new Label("Use A, S nad D to control");
+        Label manual = new Label("Controls: A, S, D");
+
         startMenuVbox.getChildren().addAll(manual, startGameButton, settingsButton);
 
         startGameButton.setOnAction(event -> {
@@ -62,64 +62,89 @@ public class GameUI {
         });
 
         gameStage.setScene(startMenuScene);
+
     }
 
     private void drawSettingsMenu() {
+
         VBox settingsMenuVbox = new VBox();
         Scene settingsMenuScene = new Scene(settingsMenuVbox);
-        Button backToStartMenuButton = new Button("Back");
-        Label horizontalSizeLabel = new Label("columns");
-        Slider horizontalSlider = new Slider(2,10,5);
-        Label verticalSizeLabel = new Label("rows");
-        Slider verticalSizeSlider = new Slider(2,10,8);
-        Label sampleBoardLabel = new Label("Sample board");
         GridPane gameField = new GridPane();
+        Button backToStartMenuButton = new Button("Back to Start Menu");
+        Slider boardWidthSlider = new Slider(2,10,Settings.getBoardWidth());
+        Slider boardHeightSlider = new Slider(2,10,Settings.getBoardHeight());
+        Label boardWidthLabel = new Label("columns");
+        Label boardHeithtLabel = new Label("rows");
+        Label sampleBoardLabel = new Label("Sample board:");
 
-        int sampleBoardWidth = 5;
-        int sampleBoardHeight = 8;
+        boardWidthSlider.setShowTickLabels(true);
+        boardWidthSlider.setMinorTickCount(1);
+        boardWidthSlider.setMajorTickUnit(2);
+        boardWidthSlider.setSnapToTicks(true);
 
-        horizontalSlider.setShowTickLabels(true);
-        horizontalSlider.setMinorTickCount(1);
-        horizontalSlider.setMajorTickUnit(2);
-        horizontalSlider.setSnapToTicks(true);
+        boardHeightSlider.setShowTickLabels(true);
+        boardHeightSlider.setMinorTickCount(1);
+        boardHeightSlider.setMajorTickUnit(2);
+        boardHeightSlider.setSnapToTicks(true);
 
-        verticalSizeSlider.setShowTickLabels(true);
-        verticalSizeSlider.setSnapToTicks(true);
 
+        backToStartMenuButton.setOnAction(event -> {
+            drawStartMenu();
+        });
+
+
+        // Draw a sample board using current board size:
         Game game = new Game();
-        for (int i = 0; i < (int) 8; i++) {
-            game.insertRow(game);
+        for (int i = 0; i < Settings.getBoardHeight(); i++) {
+            game.insertRow();
         }
         drawGame(gameField, game);
         gameStage.show();
 
 
-        horizontalSlider.valueProperty().addListener((observable, oldSliderValue, newSliderValue) -> {
+        boardWidthSlider.valueProperty().addListener((observable, oldSliderValue, newSliderValue) -> {
 
-            game.setBoardWidth(newSliderValue.intValue());
+            if (newSliderValue.intValue() != Settings.getBoardWidth()) {
 
-            for (int i = 0; i < newSliderValue.intValue(); i++) {
-                game.insertRow(game);
+                Settings.setBoardWidth(newSliderValue.intValue());
+                System.out.println("set width to " + newSliderValue.intValue());
+
+                Game sampleGame = new Game();
+
+                for (int i = 0; i < Settings.getBoardHeight(); i++) {
+                   sampleGame.insertRow();
+                }
+
+                drawSampleGameField(gameField, sampleGame);
+                gameStage.show();
             }
-            drawGame(gameField, game);
-            gameStage.show();
         });
 
 
-        verticalSizeSlider.valueProperty().addListener((observable, oldSliderValue, newSliderValue) -> {
+        boardHeightSlider.valueProperty().addListener((observable, oldSliderValue, newSliderValue) -> {
 
-            game.setBoardHeight(newSliderValue.intValue());
-            for (int i = 0; i < newSliderValue.intValue(); i++) {
-                game.insertRow(game);
+            if (newSliderValue.intValue() != Settings.getBoardHeight()) {
+
+                Game sampleGame = new Game();
+                System.out.println("set width to " + newSliderValue.intValue());
+
+                Settings.setBoardHeight(newSliderValue.intValue());
+
+
+                for (int i = 0; i < Settings.getBoardHeight(); i++) {
+                    sampleGame.insertRow();
+                }
+                drawGame(gameField, sampleGame);
+                gameStage.show();
             }
-            drawGame(gameField, game);
-            gameStage.show();
         });
 
-        settingsMenuVbox.getChildren().addAll(backToStartMenuButton, horizontalSizeLabel, horizontalSlider, verticalSizeLabel, verticalSizeSlider, sampleBoardLabel,gameField);
-
+        settingsMenuVbox.getChildren().addAll(backToStartMenuButton, boardWidthLabel, boardWidthSlider, boardHeithtLabel, boardHeightSlider, sampleBoardLabel, gameField);
 
         gameStage.setScene(settingsMenuScene);
+    }
+
+    private void drawSampleGameField(GridPane gameField, Game sampleGame) {
     }
 
     private void launchNewGame() {
@@ -154,30 +179,29 @@ public class GameUI {
         gameScene.setOnKeyPressed(keyEvent -> {  // Keyboard input for the game
             String input;
             input = keyEvent.getText();
-            System.out.println(input);
 
             if (input.equals("a")){
                 game.movePlayerLeft();
-                game.insertRow(game);
+                game.insertRow();
                 game.evaluateGame();
-                if(game.isGameOver(game)) drawGameOverMenu(game);
+                if(game.isGameOver()) drawGameOverMenu(game);
                 updateScoreBoard(game);
                 drawGame(gameField, game);
             }
 
             if (input.equals("d")){
                 game.movePlayerRight();
-                game.insertRow(game);
+                game.insertRow();
                 game.evaluateGame();
-                if(game.isGameOver(game)) drawGameOverMenu(game);
+                if(game.isGameOver()) drawGameOverMenu(game);
                 updateScoreBoard(game);
                 drawGame(gameField, game);
             }
 
             if (input.equals("s")) {
-                game.insertRow(game);
+                game.insertRow();
                 game.evaluateGame();
-                if(game.isGameOver(game)) drawGameOverMenu(game);
+                if(game.isGameOver()) drawGameOverMenu(game);
                 updateScoreBoard(game);
                 drawGame(gameField, game);
             }
@@ -229,12 +253,12 @@ public class GameUI {
             public void run() {
                 Platform.runLater(new Runnable() {
                     public void run() {
-                        game.insertRow(game);
+                        game.insertRow();
                         game.evaluateGame();
-                        if(game.isGameOver(game)) drawGameOverMenu(game);
+                        if(game.isGameOver()) drawGameOverMenu(game);
                         drawGame(gameField,game);
                         updateScoreBoard(game);
-                        if (!game.isGameOver(game)) setTimer(game, gameField); // new timer starts only when the game is not over
+                        if (!game.isGameOver()) setTimer(game, gameField); // new timer starts only when the game is not over
                     }
                 });
             }
@@ -245,12 +269,18 @@ public class GameUI {
     private void drawGameOverMenu(Game game) {
         VBox gameOverVbox = new VBox();
         Scene gameOverScene = new Scene(gameOverVbox);
-        Button startGameButton = new Button("Start");
+        Button startGameButton = new Button("Start a new game");
         Label mocking = new Label("Game over. Your score was " + game.getScore() + ". Try again.");
-        gameOverVbox.getChildren().addAll(mocking, startGameButton);
+        Button goToStartMenuButton = new Button("Go to start menu");
+
+        gameOverVbox.getChildren().addAll(mocking, startGameButton, goToStartMenuButton);
 
         startGameButton.setOnAction(event -> {
             launchNewGame();
+        });
+
+        goToStartMenuButton.setOnAction(event -> {
+            drawStartMenu();
         });
 
         gameStage.setScene(gameOverScene);
