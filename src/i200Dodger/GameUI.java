@@ -1,6 +1,7 @@
 package i200Dodger;
 
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,6 +9,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -69,6 +71,7 @@ public class GameUI {
 
         VBox settingsMenuVbox = new VBox();
         Scene settingsMenuScene = new Scene(settingsMenuVbox);
+        StackPane gameFieldBackGround = new StackPane();
         GridPane gameField = new GridPane();
         Button backToStartMenuButton = new Button("Back to Start Menu");
         Slider boardWidthSlider = new Slider(2,10,Settings.getBoardWidth());
@@ -76,6 +79,13 @@ public class GameUI {
         Label boardWidthLabel = new Label("columns");
         Label boardHeithtLabel = new Label("rows");
         Label sampleBoardLabel = new Label("Sample board:");
+
+        Rectangle sampleFieldBackGround = new Rectangle(400, 400);
+        sampleFieldBackGround.setFill(Color.BLACK);
+        gameFieldBackGround.getChildren().addAll(sampleFieldBackGround);
+
+        gameFieldBackGround.setPrefSize(400, 400);
+
 
         boardWidthSlider.setShowTickLabels(true);
         boardWidthSlider.setMinorTickCount(1);
@@ -110,12 +120,21 @@ public class GameUI {
                 System.out.println("set width to " + newSliderValue.intValue());
 
                 Game sampleGame = new Game();
+                GridPane sampleGameField = new GridPane();
+
 
                 for (int i = 0; i < Settings.getBoardHeight(); i++) {
                    sampleGame.insertRow();
                 }
 
-                drawSampleGameField(gameField, sampleGame);
+                Rectangle blankField = new Rectangle(400, 400);
+                blankField.setFill(Color.BLACK);
+
+                gameFieldBackGround.getChildren().addAll(blankField);
+
+                drawGame(sampleGameField, sampleGame);
+                gameFieldBackGround.getChildren().addAll(sampleGameField);
+
                 gameStage.show();
             }
         });
@@ -126,6 +145,8 @@ public class GameUI {
             if (newSliderValue.intValue() != Settings.getBoardHeight()) {
 
                 Game sampleGame = new Game();
+                GridPane sampleGameField = new GridPane();
+
                 System.out.println("set width to " + newSliderValue.intValue());
 
                 Settings.setBoardHeight(newSliderValue.intValue());
@@ -134,12 +155,21 @@ public class GameUI {
                 for (int i = 0; i < Settings.getBoardHeight(); i++) {
                     sampleGame.insertRow();
                 }
-                drawGame(gameField, sampleGame);
+
+                Rectangle blankField = new Rectangle(400, 400);
+                blankField.setFill(Color.BLACK);
+
+                drawGame(sampleGameField, sampleGame);
+
+                gameFieldBackGround.getChildren().addAll(blankField);
+                gameFieldBackGround.getChildren().addAll(sampleGameField);
+
                 gameStage.show();
             }
         });
 
-        settingsMenuVbox.getChildren().addAll(backToStartMenuButton, boardWidthLabel, boardWidthSlider, boardHeithtLabel, boardHeightSlider, sampleBoardLabel, gameField);
+        gameFieldBackGround.getChildren().addAll(gameField);
+        settingsMenuVbox.getChildren().addAll(backToStartMenuButton, boardWidthLabel, boardWidthSlider, boardHeithtLabel, boardHeightSlider, sampleBoardLabel,gameFieldBackGround);
 
         gameStage.setScene(settingsMenuScene);
     }
