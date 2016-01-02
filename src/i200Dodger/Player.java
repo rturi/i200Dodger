@@ -17,7 +17,6 @@ public class Player {
         range = boardWidth;
         position = (int) boardWidth / 2;
         color = "blue";
-        score = 0;
         lives = 3;
 
     }
@@ -29,9 +28,6 @@ public class Player {
 
     }
 
-    public int getScore(){
-        return score;
-    }
 
     public int getLives(){
         return lives;
@@ -49,7 +45,4 @@ public class Player {
         lives--;
     }
 
-    public void increaseScore() {
-        score++;
-    }
 }

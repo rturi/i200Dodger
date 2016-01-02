@@ -56,66 +56,79 @@ public class Game {
             //printGame(player,obstacles);
     }
 
+    private void fillTopRowWithBlanks() {
+        for (int i = 0; i < obstacles[0].length; i++) {
+            obstacles[0][i].setColor("____");
+        }
+    }
+
     public void insertRow() {
 
-        //first shift all existing obstacles one row down
+        int test = 0;
 
+        //first shift all existing obstacles one row down
         for (int i = obstacles.length - 1; i > 0  ; i--) {
             for (int j = 0; j < obstacles[0].length; j++) {
                 obstacles[i][j].setColor(obstacles[i-1][j].getColor());
             }
-
         }
 
         //generate obstacles for the new top row
-
         this.generateNewTopRow();
 
-        // Check if there is a nonnegative choice for the player with the new top row
-        int test = 0;
-        while(!hasNonNegativeChoice(this, (this.getBoardHeight() - 1), this.getPlayerPosition()) && test < 300){
-            this.generateNewTopRow();
 
+
+        // Check if there is a nonnegative choice for the player with the new top row
+        while(!hasNonNegativeChoice((boardHeight - 1), this.getPlayerPosition()) && test < 25){
+            this.generateNewTopRow();
             test++;
-            /*if (test > 295) System.out.println("test: " + test);
-            for (int i = 0; i < this.getBoardWidth(); i++) {
-                obstacles[0][i].setColor("____");
-            }
-*/        }
+            if (test == 25) this.fillTopRowWithBlanks();
+        }
     }
 
 
-    private boolean hasNonNegativeChoice(Game game, int row, int column){
+    private boolean hasNonNegativeChoice(int row, int column){
 
-        //System.out.println("start hasNonNegativeChoice row: " + row + " column: " + column);
+        printGame(player, obstacles);
 
-        boolean leftOK = false;
-        boolean forwardOK = false;
-        boolean rightOK = false;
+        boolean OKtoGoLeft = false;
+        boolean OKtoGoForward = false;
+        boolean OKtoGoRight = false;
 
         if (row == 1) {
-            if (column != 0) leftOK = isNonNegativeObstacle(0, (column - 1));
-            forwardOK = isNonNegativeObstacle(0, column);
-            if (column != (game.getBoardWidth() - 1)) rightOK = isNonNegativeObstacle(0, (column + 1));
+            if (column != 0) {
+                System.out.println("row " + row + ", column " + column + " leftOK? - " + isNonNegativeObstacle(0, (column - 1)));
+                if(isNonNegativeObstacle(0, (column - 1))) return true;
+            }
+            if(isNonNegativeObstacle(0, column)){
+                System.out.println("row " + row + ", column " + column + " forwardOK? - " + isNonNegativeObstacle(0, column));
+                return true;
+            }
+            if (column != (boardWidth - 1)) {
+                System.out.println("row " + row + ", column " + column + " rightOK? - " + isNonNegativeObstacle(0, (column + 1)));
+                if(isNonNegativeObstacle(0, (column + 1))) return true;
+            }
         } else {
             if (column != 0 && isNonNegativeObstacle((row - 1), (column - 1))) {
-                //System.out.println("goin' left " + row + " " + column);
-                leftOK = hasNonNegativeChoice(game, (row - 1), (column - 1));
+                System.out.println("row " + row + ", column " + column + " leftOK? - " + hasNonNegativeChoice((row - 1), (column - 1)));
+                if(hasNonNegativeChoice((row - 1), (column - 1))) return true;
             }
-            if (column != 0 && column != (game.getBoardWidth() - 1) && isNonNegativeObstacle((row - 1), (column))) {
-                //System.out.println("goin' straight on " + row + " " + column);
-                forwardOK = hasNonNegativeChoice(game, (row - 1), (column));
+            if (isNonNegativeObstacle((row - 1), (column))) {
+                System.out.println("row " + row + ", column " + column + " forwardOK? - " + isNonNegativeObstacle((row - 1), (column)));
+                if(hasNonNegativeChoice((row - 1), (column))) return true;
             }
-            if (column != (game.getBoardWidth() - 1) && isNonNegativeObstacle((row - 1), (column + 1))) {
-                //System.out.println("goin' right " + row + " " + column);
-                rightOK = hasNonNegativeChoice(game, (row - 1), (column + 1));
+            if (column != (boardWidth - 1) && isNonNegativeObstacle((row - 1), (column + 1))) {
+                System.out.println("row " + row + ", column " + column + " rightOK? - " + isNonNegativeObstacle((row - 1), (column + 1)));
+                if(hasNonNegativeChoice((row - 1), (column + 1))) return true;
             }
         }
 
-        //System.out.println("end hasNonNegativeChoice row: " + row + " column: " + column + " leftOK: " + leftOK + " forwardOK " + forwardOK + " rightOK " + rightOK);
+        System.out.println("conclusion - row " + row + ", column " + column + " - " + (OKtoGoLeft || OKtoGoForward || OKtoGoRight));
+        System.out.println();
 
-        return (leftOK || forwardOK || rightOK);
+        return false;
     }
+
 
     /*Prints out the game board to the console*/
     public void printGame(Player player, Obstacle[][] obstacleSet){
@@ -162,11 +175,11 @@ public class Game {
     /* Looks at the obstacles and player and changes the score and/or lives if needed */
     public void evaluateGame() {
 
-        if(getObstacle(this.getBoardHeight()-1, this.player.getPosition()).getColor().equals("red")) {
+        if(getObstacle(boardHeight-1, this.player.getPosition()).getColor().equals("red")) {
             player.reduceLives();
         }
 
-        if(this.getObstacle(this.getBoardHeight()-1, this.player.getPosition()).getColor().equals("blue")) {
+        if(this.getObstacle(boardHeight-1, this.player.getPosition()).getColor().equals("blue")) {
             score++;
         }
     }
@@ -177,15 +190,6 @@ public class Game {
 
     public void movePlayerRight() {
         player.movePlayer("right");
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void increaseLevel() {
-        level++;
-        System.out.println("new level:" + level);
     }
 
     public boolean isGameOver() {
@@ -206,12 +210,4 @@ public class Game {
         return false;
     }
 
-
-    public void setBoardHeight(int boardHeight) {
-        this.boardHeight = boardHeight;
-    }
-
-    public void setBoardWidth(int boardWidth) {
-        this.boardWidth = boardWidth;
-    }
 }
