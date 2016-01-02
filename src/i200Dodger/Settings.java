@@ -238,4 +238,15 @@ public class Settings {
 
         System.out.println("new value " + getBoardHeight());
     }
+
+    private String getSetting(){
+        String result = "";
+
+        return result;
+    }
+
+    private void setSetting() {
+
+    }
+
 }

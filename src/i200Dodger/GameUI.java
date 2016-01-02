@@ -3,10 +3,7 @@ package i200Dodger;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -300,10 +297,16 @@ public class GameUI {
         VBox gameOverVbox = new VBox();
         Scene gameOverScene = new Scene(gameOverVbox);
         Button startGameButton = new Button("Start a new game");
-        Label mocking = new Label("Game over. Your score was " + game.getScore() + ". Try again.");
+        Label gameOver = new Label("Game over. Your score was " + game.getScore() + ". Try again.");
         Button goToStartMenuButton = new Button("Go to start menu");
+        Label playerNameLabel = new Label("Your name");
+        TextField playerNameField = new TextField(game.getPlayerName());
+        Button saveHighScoreButton = new Button("save");
 
-        gameOverVbox.getChildren().addAll(mocking, startGameButton, goToStartMenuButton);
+        if(HighScores.isHighScore(game.getScore()))
+            gameOverVbox.getChildren().addAll(gameOver, playerNameLabel, playerNameField, saveHighScoreButton, startGameButton, goToStartMenuButton);
+        else
+            gameOverVbox.getChildren().addAll(gameOver, startGameButton, goToStartMenuButton);
 
         startGameButton.setOnAction(event -> {
             launchNewGame();
@@ -311,6 +314,10 @@ public class GameUI {
 
         goToStartMenuButton.setOnAction(event -> {
             drawStartMenu();
+        });
+
+        saveHighScoreButton.setOnAction(event -> {
+            game.setPlayerName(playerNameField.getText());
         });
 
         gameStage.setScene(gameOverScene);

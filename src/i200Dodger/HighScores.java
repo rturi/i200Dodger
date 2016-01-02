@@ -3,6 +3,7 @@ package i200Dodger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 /**
  * Created by Roland on 20/12/2015.
@@ -33,9 +34,17 @@ public class HighScores {
 
         String[][] highScoresTable = new String[10][];
 
+        Connection connection = openDBconnection();
+
+        closeDBConnection(connection);
 
         return highScoresTable;
     }
+
+    public static void insertHighScore (int score, Timestamp time, String name, String boardSize){
+
+    }
+
 
     private static Connection openDBconnection() {
 
@@ -66,4 +75,7 @@ public class HighScores {
         System.out.println("DB connection closed");
     }
 
+    public static boolean isHighScore(int score) {
+        return true;
+    }
 }

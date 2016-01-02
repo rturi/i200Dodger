@@ -1,5 +1,12 @@
 package i200Dodger;
 
+import java.security.Timestamp;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.SimpleTimeZone;
+
 /**
  * Created by Roland on 03/12/2015.
  */
@@ -11,9 +18,13 @@ public class Game {
 
     private Player player;
 
+    private String playerName = "Anonymous";
+
     private Obstacle[][] obstacles;
 
     private int score = 0;
+
+    private LocalDate gameEndDate;
 
     public Game (){
 
@@ -89,7 +100,7 @@ public class Game {
 
     private boolean hasNonNegativeChoice(int row, int column){
 
-        printGame(player, obstacles);
+        //printGame(player, obstacles);
 
         boolean OKtoGoLeft = false;
         boolean OKtoGoForward = false;
@@ -97,34 +108,34 @@ public class Game {
 
         if (row == 1) {
             if (column != 0) {
-                System.out.println("row " + row + ", column " + column + " leftOK? - " + isNonNegativeObstacle(0, (column - 1)));
+                //System.out.println("row " + row + ", column " + column + " leftOK? - " + isNonNegativeObstacle(0, (column - 1)));
                 if(isNonNegativeObstacle(0, (column - 1))) return true;
             }
             if(isNonNegativeObstacle(0, column)){
-                System.out.println("row " + row + ", column " + column + " forwardOK? - " + isNonNegativeObstacle(0, column));
+                //System.out.println("row " + row + ", column " + column + " forwardOK? - " + isNonNegativeObstacle(0, column));
                 return true;
             }
             if (column != (boardWidth - 1)) {
-                System.out.println("row " + row + ", column " + column + " rightOK? - " + isNonNegativeObstacle(0, (column + 1)));
+                //System.out.println("row " + row + ", column " + column + " rightOK? - " + isNonNegativeObstacle(0, (column + 1)));
                 if(isNonNegativeObstacle(0, (column + 1))) return true;
             }
         } else {
             if (column != 0 && isNonNegativeObstacle((row - 1), (column - 1))) {
-                System.out.println("row " + row + ", column " + column + " leftOK? - " + hasNonNegativeChoice((row - 1), (column - 1)));
+                //System.out.println("row " + row + ", column " + column + " leftOK? - " + hasNonNegativeChoice((row - 1), (column - 1)));
                 if(hasNonNegativeChoice((row - 1), (column - 1))) return true;
             }
             if (isNonNegativeObstacle((row - 1), (column))) {
-                System.out.println("row " + row + ", column " + column + " forwardOK? - " + isNonNegativeObstacle((row - 1), (column)));
+                //System.out.println("row " + row + ", column " + column + " forwardOK? - " + isNonNegativeObstacle((row - 1), (column)));
                 if(hasNonNegativeChoice((row - 1), (column))) return true;
             }
             if (column != (boardWidth - 1) && isNonNegativeObstacle((row - 1), (column + 1))) {
-                System.out.println("row " + row + ", column " + column + " rightOK? - " + isNonNegativeObstacle((row - 1), (column + 1)));
+                //System.out.println("row " + row + ", column " + column + " rightOK? - " + isNonNegativeObstacle((row - 1), (column + 1)));
                 if(hasNonNegativeChoice((row - 1), (column + 1))) return true;
             }
         }
 
-        System.out.println("conclusion - row " + row + ", column " + column + " - " + (OKtoGoLeft || OKtoGoForward || OKtoGoRight));
-        System.out.println();
+        //System.out.println("conclusion - row " + row + ", column " + column + " - " + (OKtoGoLeft || OKtoGoForward || OKtoGoRight));
+        //System.out.println();
 
         return false;
     }
@@ -194,7 +205,10 @@ public class Game {
 
     public boolean isGameOver() {
 
-        if(this.getLives() < 0) return true;
+        if(this.getLives() < 0) {
+            gameEndDate= LocalDate.now();
+            return true;
+        }
 
         return false;
     }
@@ -210,4 +224,11 @@ public class Game {
         return false;
     }
 
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
 }
