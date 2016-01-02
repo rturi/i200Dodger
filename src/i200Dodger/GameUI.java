@@ -300,7 +300,7 @@ public class GameUI {
         Label gameOver = new Label("Game over. Your score was " + game.getScore() + ". Try again.");
         Button goToStartMenuButton = new Button("Go to start menu");
         Label playerNameLabel = new Label("Your name");
-        TextField playerNameField = new TextField(game.getPlayerName());
+        TextField playerNameField = new TextField(Settings.getPlayerName());
         Button saveHighScoreButton = new Button("save");
 
         if(HighScores.isHighScore(game.getScore()))
@@ -317,7 +317,7 @@ public class GameUI {
         });
 
         saveHighScoreButton.setOnAction(event -> {
-            game.setPlayerName(playerNameField.getText());
+            Settings.setPlayerName(playerNameField.getText());
         });
 
         gameStage.setScene(gameOverScene);
