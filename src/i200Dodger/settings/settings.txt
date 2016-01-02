@@ -1,3 +1,3 @@
-boardWidth:5
+boardWidth:6
 boardHeight:8
 playerName:fsafdsaghhhh

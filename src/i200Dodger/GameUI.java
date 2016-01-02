@@ -114,7 +114,6 @@ public class GameUI {
             if (newSliderValue.intValue() != Settings.getBoardWidth()) {
 
                 Settings.setBoardWidth(newSliderValue.intValue());
-                System.out.println("set width to " + newSliderValue.intValue());
 
                 Game sampleGame = new Game();
                 GridPane sampleGameField = new GridPane();
@@ -143,8 +142,6 @@ public class GameUI {
 
                 Game sampleGame = new Game();
                 GridPane sampleGameField = new GridPane();
-
-                System.out.println("set width to " + newSliderValue.intValue());
 
                 Settings.setBoardHeight(newSliderValue.intValue());
 
