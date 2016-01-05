@@ -10,6 +10,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        //HighScoresDB.createTable();
         GameUI gameUI = new GameUI();
         //System.exit(0);
     }

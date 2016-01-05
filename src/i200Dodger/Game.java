@@ -232,4 +232,8 @@ public class Game {
     public String getPlayerName() {
         return playerName;
     }
+
+    public String getGameEndDate() {
+        return gameEndDate.toString();
+    }
 }

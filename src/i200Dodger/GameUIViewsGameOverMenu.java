@@ -1,7 +1,5 @@
 package i200Dodger;
 
-import i200Dodger.HighScores;
-import i200Dodger.Settings;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,22 +16,24 @@ public class GameUIViewsGameOverMenu {
         Scene gameOverScene = new Scene(gameOverVbox);
         Button startGameButton = new Button("Start a new game");
         Label gameOver = new Label("Game over. Your score was " + game.getScore() + ". Try again.");
-        Button goToStartMenuButton = new Button("Go to start menu");
+        Button goToMainMenuButton = new Button("Go to main menu");
         Label playerNameLabel = new Label("Your name");
         TextField playerNameField = new TextField(Settings.getPlayerName());
         Button saveHighScoreButton = new Button("save");
 
-        if (HighScores.isHighScore(game.getScore()))
-            gameOverVbox.getChildren().addAll(gameOver, playerNameLabel, playerNameField, saveHighScoreButton, startGameButton, goToStartMenuButton);
-        else
-            gameOverVbox.getChildren().addAll(gameOver, startGameButton, goToStartMenuButton);
+        if (HighScoresDB.isHighScore(game.getScore())) {
+            gameOverVbox.getChildren().addAll(gameOver, playerNameLabel, playerNameField, saveHighScoreButton, startGameButton, goToMainMenuButton);
+            HighScoresDB.insertHighScore(Settings.getPlayerName(), game.getScore(), Settings.getBoardHeight(), Settings.getBoardWidth(), game.getGameEndDate());
+            HighScoresDB.getHighScores();
+        } else
+            gameOverVbox.getChildren().addAll(gameOver, startGameButton, goToMainMenuButton);
 
         startGameButton.setOnAction(event -> {
             Game newGame = new Game();
             GameUIViewsGame.draw(gameStage, newGame);
         });
 
-        goToStartMenuButton.setOnAction(event -> {
+        goToMainMenuButton.setOnAction(event -> {
             GameUIViewsMainMenu.draw(gameStage);
         });
 
