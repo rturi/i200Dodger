@@ -23,20 +23,19 @@ public class HighScoresDB {
 
         Connection connection = openDBconnection();
 
-        for (int i = 0; i < 10; i++) {
 
+        for (int i = 0; i < 10; i++) {
             Statement statement = null;
             try {
                 statement = connection.createStatement();
-                String sql = "SELECT * FROM SCORES ORDER BY SCORE;";
-                ResultSet results = statement.executeQuery(sql);
+                    String sql = "SELECT * FROM SCORES ORDER BY SCORE DESC LIMIT 1 OFFSET " + i + ";";
+                    ResultSet results = statement.executeQuery(sql);
 
-                highScoresTable[i][0] = results.getString("PLAYERNAME");
-                highScoresTable[i][1] = results.getString("SCORE");
-                highScoresTable[i][2] = results.getString("BOARDSIZE");
-                highScoresTable[i][3] = results.getString("GAMEDATE");
-                System.out.println(highScoresTable[i][3]);
-                System.out.println();
+                    highScoresTable[i][0] = results.getString("PLAYERNAME");
+                    highScoresTable[i][1] = results.getString("SCORE");
+                    highScoresTable[i][2] = results.getString("BOARDSIZE");
+                    highScoresTable[i][3] = results.getString("GAMEDATE");
+                    //System.out.println(highScoresTable[i][1]);
                 statement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -55,6 +54,8 @@ public class HighScoresDB {
 
         Connection connection = openDBconnection();
         String boardSize = Integer.toString(boardWidth) + "x" + Integer.toString(boardHeight);
+
+        System.out.println(score);
 
         try {
             Statement statement = connection.createStatement();
