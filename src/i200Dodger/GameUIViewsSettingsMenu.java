@@ -1,9 +1,11 @@
 package i200Dodger;
 
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -16,7 +18,7 @@ public class GameUIViewsSettingsMenu {
     public static void draw(Stage gameStage) {
         VBox settingsMenuVbox = new VBox();
         Scene settingsMenuScene = new Scene(settingsMenuVbox);
-        StackPane gameFieldBackGround = new StackPane();
+        AnchorPane gameFieldBackGround = new AnchorPane();
         GridPane gameField = new GridPane();
         Button backToStartMenuButton = new Button("Back to Start Menu");
         Slider boardWidthSlider = new Slider(2,10,Settings.getBoardWidth());
@@ -27,6 +29,7 @@ public class GameUIViewsSettingsMenu {
 
         Rectangle sampleFieldBackGround = new Rectangle(400, 400);
         sampleFieldBackGround.setFill(Color.BLACK);
+
         gameFieldBackGround.getChildren().addAll(sampleFieldBackGround);
 
         gameFieldBackGround.setPrefSize(400, 400);
@@ -42,20 +45,28 @@ public class GameUIViewsSettingsMenu {
         boardHeightSlider.setMajorTickUnit(2);
         boardHeightSlider.setSnapToTicks(true);
 
+        // Draw a sample board using current board size:
+        Game game = new Game();
+        for (int i = 0; i < Settings.getBoardHeight()-2; i++) {
+            game.insertRow();
+        }
+        GameUI.drawGame(gameField, game);
+
+        gameFieldBackGround.setBottomAnchor(gameField, 0.0);
+
+        if (game.getBoardHeight() > game.getBoardWidth()) {
+            gameFieldBackGround.setLeftAnchor(gameField, (double) (game.getBoardHeight() - game.getBoardWidth()) * (int) 400 / game.getBoardHeight() / 2);
+
+        }
+
+        gameFieldBackGround.getChildren().addAll(gameField);
+        settingsMenuVbox.getChildren().addAll(backToStartMenuButton, boardWidthLabel, boardWidthSlider, boardHeithtLabel, boardHeightSlider, sampleBoardLabel,gameFieldBackGround);
+
+
 
         backToStartMenuButton.setOnAction(event -> {
             GameUIViewsMainMenu.draw(gameStage);
         });
-
-
-        // Draw a sample board using current board size:
-        Game game = new Game();
-        for (int i = 0; i < Settings.getBoardHeight(); i++) {
-            game.insertRow();
-        }
-        GameUI.drawGame(gameField, game);
-        gameStage.show();
-
 
         boardWidthSlider.valueProperty().addListener((observable, oldSliderValue, newSliderValue) -> {
 
@@ -67,19 +78,23 @@ public class GameUIViewsSettingsMenu {
                 GridPane sampleGameField = new GridPane();
 
 
-                for (int i = 0; i < Settings.getBoardHeight(); i++) {
+                for (int i = 0; i < Settings.getBoardHeight()-2; i++) {
                     sampleGame.insertRow();
                 }
 
                 Rectangle blankField = new Rectangle(400, 400);
                 blankField.setFill(Color.BLACK);
 
-                gameFieldBackGround.getChildren().addAll(blankField);
-
                 GameUI.drawGame(sampleGameField, sampleGame);
-                gameFieldBackGround.getChildren().addAll(sampleGameField);
 
-                gameStage.show();
+                gameFieldBackGround.setBottomAnchor(sampleGameField, 0.0);
+
+                if (sampleGame.getBoardHeight() > sampleGame.getBoardWidth()) {
+                    gameFieldBackGround.setLeftAnchor(sampleGameField, (double) (sampleGame.getBoardHeight()-sampleGame.getBoardWidth()) * (int) 400 / sampleGame.getBoardHeight() / 2);
+                }
+
+                gameFieldBackGround.getChildren().addAll(blankField, sampleGameField);
+
             }
         });
 
@@ -88,13 +103,12 @@ public class GameUIViewsSettingsMenu {
 
             if (newSliderValue.intValue() != Settings.getBoardHeight()) {
 
+                Settings.setBoardHeight(newSliderValue.intValue());
+
                 Game sampleGame = new Game();
                 GridPane sampleGameField = new GridPane();
 
-                Settings.setBoardHeight(newSliderValue.intValue());
-
-
-                for (int i = 0; i < Settings.getBoardHeight(); i++) {
+                for (int i = 0; i < Settings.getBoardHeight() - 2; i++) {
                     sampleGame.insertRow();
                 }
 
@@ -103,15 +117,17 @@ public class GameUIViewsSettingsMenu {
 
                 GameUI.drawGame(sampleGameField, sampleGame);
 
-                gameFieldBackGround.getChildren().addAll(blankField);
-                gameFieldBackGround.getChildren().addAll(sampleGameField);
+                gameFieldBackGround.setBottomAnchor(sampleGameField, 0.0);
 
-                gameStage.show();
+                if (sampleGame.getBoardHeight() > sampleGame.getBoardWidth()) {
+                    gameFieldBackGround.setLeftAnchor(sampleGameField, (double) (sampleGame.getBoardHeight() - sampleGame.getBoardWidth()) * (int) 400 / sampleGame.getBoardHeight() / 2);
+
+                }
+                gameFieldBackGround.getChildren().addAll(blankField, sampleGameField);
+
             }
         });
 
-        gameFieldBackGround.getChildren().addAll(gameField);
-        settingsMenuVbox.getChildren().addAll(backToStartMenuButton, boardWidthLabel, boardWidthSlider, boardHeithtLabel, boardHeightSlider, sampleBoardLabel,gameFieldBackGround);
 
         gameStage.setScene(settingsMenuScene);
     }

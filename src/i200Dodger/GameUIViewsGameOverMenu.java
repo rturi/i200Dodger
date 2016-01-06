@@ -23,8 +23,7 @@ public class GameUIViewsGameOverMenu {
 
         if (HighScoresDB.isHighScore(game.getScore())) {
             gameOverVbox.getChildren().addAll(gameOver, playerNameLabel, playerNameField, saveHighScoreButton, startGameButton, goToMainMenuButton);
-            HighScoresDB.insertHighScore(Settings.getPlayerName(), game.getScore(), Settings.getBoardHeight(), Settings.getBoardWidth(), game.getGameEndDate());
-            HighScoresDB.getHighScores();
+            //HighScoresDB.insertHighScore(Settings.getPlayerName(), game.getScore(), Settings.getBoardHeight(), Settings.getBoardWidth(), game.getGameEndDate());
         } else
             gameOverVbox.getChildren().addAll(gameOver, startGameButton, goToMainMenuButton);
 
