@@ -36,7 +36,6 @@ public class GameUIViewsGame {
         gameStage.setScene(gameScene);
         gameStage.show();
 
-        //setTimer(game, gameField);
         setTimer(gameStage, game, gameField, scoreBoard);
 
         gameScene.setOnKeyPressed(keyEvent -> {  // Keyboard input for the game
@@ -78,7 +77,6 @@ public class GameUIViewsGame {
         /* Takes in:
         - Game (to insert a new row if the timer runs out and
                 * */
-
         Timer timer = new Timer();
 
         timer.schedule(new TimerTask() {

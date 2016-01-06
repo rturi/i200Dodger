@@ -5,13 +5,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.util.Timer;
+
 public class GameUI {
 
     public GameUI (){
 
         Stage gameStage = new Stage();
-
-        //setGameStage();
 
         gameStage.setOnCloseRequest(event1 -> {System.exit(0);}); // Just to make sure everything gets closed
         gameStage.setTitle("i200Dodger");

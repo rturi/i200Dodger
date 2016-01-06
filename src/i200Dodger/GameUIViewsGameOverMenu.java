@@ -17,13 +17,10 @@ public class GameUIViewsGameOverMenu {
         Button startGameButton = new Button("Start a new game");
         Label gameOver = new Label("Game over. Your score was " + game.getScore() + ". Try again.");
         Button goToMainMenuButton = new Button("Go to main menu");
-        Label playerNameLabel = new Label("Your name");
-        TextField playerNameField = new TextField(Settings.getPlayerName());
-        Button saveHighScoreButton = new Button("save");
+        Button saveHighScoreButton = new Button("Save high score");
 
         if (HighScoresDB.isHighScore(game.getScore())) {
-            gameOverVbox.getChildren().addAll(gameOver, playerNameLabel, playerNameField, saveHighScoreButton, startGameButton, goToMainMenuButton);
-            //HighScoresDB.insertHighScore(Settings.getPlayerName(), game.getScore(), Settings.getBoardHeight(), Settings.getBoardWidth(), game.getGameEndDate());
+            gameOverVbox.getChildren().addAll(gameOver, saveHighScoreButton, startGameButton, goToMainMenuButton);
         } else
             gameOverVbox.getChildren().addAll(gameOver, startGameButton, goToMainMenuButton);
 
@@ -37,7 +34,7 @@ public class GameUIViewsGameOverMenu {
         });
 
         saveHighScoreButton.setOnAction(event -> {
-            Settings.setPlayerName(playerNameField.getText());
+            GameUIViewsNameInput.draw(gameStage, game);
         });
 
         gameStage.setScene(gameOverScene);

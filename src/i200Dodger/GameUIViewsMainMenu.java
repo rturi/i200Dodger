@@ -6,6 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Timer;
+
 
 public class GameUIViewsMainMenu {
 
@@ -22,6 +24,7 @@ public class GameUIViewsMainMenu {
 
         startGameButton.setOnAction(event -> {
             Game newGame = new Game();
+            Timer timer = new Timer();
             GameUIViewsGame.draw(gameStage, newGame);
         });
 

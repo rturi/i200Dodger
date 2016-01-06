@@ -51,9 +51,9 @@ public class GameUIViewsHighScores {
 
         String[][] highScores = HighScoresDB.getHighScores();
 
-        for (int i = 1; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
 
-            Label placeLabel = new Label(i + "   ");
+            Label placeLabel = new Label(i+1 + "   ");
             scoresPane.add(placeLabel, 0, i+1);
             for (int j = 0; j < 4; j++) {
                 Label label = new Label(highScores[i][j] + " ");

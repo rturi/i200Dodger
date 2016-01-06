@@ -1,5 +1,8 @@
 package i200Dodger;
 
+import jdk.nashorn.internal.ir.WhileNode;
+
+import java.awt.*;
 import java.sql.*;
 
 
@@ -23,32 +26,32 @@ public class HighScoresDB {
 
         Connection connection = openDBconnection();
 
+        Statement statement = null;
+        int i = 0;
 
-        for (int i = 0; i < 10; i++) {
-            Statement statement = null;
-            try {
-                statement = connection.createStatement();
-                    String sql = "SELECT * FROM SCORES ORDER BY SCORE DESC LIMIT 1 OFFSET " + i + ";";
-                    ResultSet results = statement.executeQuery(sql);
+        try {
+            statement = connection.createStatement();
+            String sql = "SELECT * FROM SCORES ORDER BY SCORE DESC;";
+            ResultSet results = statement.executeQuery(sql);
 
-                    highScoresTable[i][0] = results.getString("PLAYERNAME");
-                    highScoresTable[i][1] = results.getString("SCORE");
-                    highScoresTable[i][2] = results.getString("BOARDSIZE");
-                    highScoresTable[i][3] = results.getString("GAMEDATE");
-                    //System.out.println(highScoresTable[i][1]);
-                statement.close();
-            } catch (SQLException e) {
+            do {
+                highScoresTable[i][0] = results.getString("PLAYERNAME");
+                highScoresTable[i][1] = results.getString("SCORE");
+                highScoresTable[i][2] = results.getString("BOARDSIZE");
+                highScoresTable[i][3] = results.getString("GAMEDATE");
+                //System.out.println(highScoresTable[i][1]);
+                i++;
+            } while (results.next() && i < 10);
+
+            statement.close();
+        }catch(SQLException e){
                 e.printStackTrace();
-            }
-
         }
 
         closeDBConnection(connection);
 
         return highScoresTable;
     }
-
-    //ID INT AUTO_INCREMENT, PLAYERNAME TEXT, SCORE INT, BOARDSIZE TEXT, GAMEDATE TEXT)
 
     public static void insertHighScore(String playerName, int score, int boardHeight, int boardWidth, String gameDate) {
 
@@ -116,28 +119,32 @@ public class HighScoresDB {
         closeDBConnection(connection);
     }
 
-    public static boolean isHighScore(int score) {
-        return true;
-    }
-
-    public static void countRows() {
+    public static void deleteTable() {
 
         Connection connection = openDBconnection();
 
-        String rowCount = "";
-
         try {
             Statement statement = connection.createStatement();
-            String sql = "SELECT Count(*) FROM SCORES;";
-            ResultSet results = statement.executeQuery(sql);
-            rowCount = results.toString();
+            String sql = "DELETE FROM SCORES;";
+            statement.executeUpdate(sql);
             statement.close();
+            System.out.println("table deleted");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         closeDBConnection(connection);
-
-        System.out.println(rowCount);
     }
+
+
+    public static boolean isHighScore(int score) {
+
+        String[][] scoreTable = getHighScores();
+
+        if (!scoreTable[9][1].equals("-") && score < Integer.parseInt(scoreTable[9][1])) return false;
+
+
+        return true;
+    }
+
 }
