@@ -9,11 +9,10 @@ import java.sql.*;
 public class HighScoresDB {
 
 
-    /* Returns 2D array of strings - 10 rows of scoreboard entries (name, score, board size, time)
-    *
-    * */
 
     public static String[][] getHighScores() {
+
+        /* Returns 2D array of strings - 10 rows of scoreboard entries (name, score, board size, time) */
 
         String[][] highScoresTable = new String[10][4];
 
@@ -29,6 +28,9 @@ public class HighScoresDB {
         Statement statement = null;
         int i = 0;
 
+
+        // goes through the DB query results row by row until there are rows. Won't work when the scores table is empty,
+        // but the game wont crash and the method will return an appropriate string array filled with -'s.
         try {
             statement = connection.createStatement();
             String sql = "SELECT * FROM SCORES ORDER BY SCORE DESC;";
@@ -39,7 +41,6 @@ public class HighScoresDB {
                 highScoresTable[i][1] = results.getString("SCORE");
                 highScoresTable[i][2] = results.getString("BOARDSIZE");
                 highScoresTable[i][3] = results.getString("GAMEDATE");
-                //System.out.println(highScoresTable[i][1]);
                 i++;
             } while (results.next() && i < 10);
 
@@ -75,8 +76,8 @@ public class HighScoresDB {
 
     public static Connection openDBconnection() {
 
-        /* code from 22.11.2015 class
-        * ToDO: proper referral
+        /* Inspiration from 22.11.2015 class
+        * https://github.com/KristerV/javaHarjutused/blob/lahendused/src/teema3/SQL_Login/Andmebaas.java
         * */
         Connection connection = null;
 

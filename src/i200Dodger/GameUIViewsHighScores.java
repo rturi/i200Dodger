@@ -1,21 +1,15 @@
 package i200Dodger;
 
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Shadow;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-import static javafx.scene.text.FontWeight.*;
 
-/**
- * Created by Roland on 05/01/2016.
- */
 public class GameUIViewsHighScores {
 
     public static void draw(Stage gameStage){

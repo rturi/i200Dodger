@@ -7,16 +7,12 @@ public class Player {
 
     private int position;
     private int range;
-    private int score;
     private int lives;
-    private String color;
-    private String name;
 
     public Player (int boardWidth){
 
         range = boardWidth;
         position = (int) boardWidth / 2;
-        color = "blue";
         lives = 3;
 
     }
@@ -35,10 +31,6 @@ public class Player {
 
     public int getPosition(){
         return position;
-    }
-
-    public String getColor(){
-        return color;
     }
 
     public void reduceLives() {

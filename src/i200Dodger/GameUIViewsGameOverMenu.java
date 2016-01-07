@@ -3,8 +3,8 @@ package i200Dodger;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 
@@ -19,6 +19,9 @@ public class GameUIViewsGameOverMenu {
         Button goToMainMenuButton = new Button("Go to main menu");
         Button saveHighScoreButton = new Button("Save high score");
 
+        gameOver.setFont(Font.font(null, 16));
+
+        // If the game score was good enough to get to the top ten, the "Save high score" button is shown.
         if (HighScoresDB.isHighScore(game.getScore())) {
             gameOverVbox.getChildren().addAll(gameOver, saveHighScoreButton, startGameButton, goToMainMenuButton);
         } else

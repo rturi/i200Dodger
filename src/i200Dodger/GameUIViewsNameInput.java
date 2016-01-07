@@ -4,15 +4,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-/**
- * Created by Roland on 06/01/2016.
- */
+
 public class GameUIViewsNameInput {
+
+    /* Used when player saves a high score.
+    * error message is an internal variable to display error messages when player inserts unsuitable names*/
 
     private static Label errorMessage;
 
@@ -23,7 +24,12 @@ public class GameUIViewsNameInput {
         Label nameLabel = new Label("Enter your name");
         TextField playerNameField = new TextField(Settings.getPlayerName());
         Button scoreSaveButton = new Button("Save");
+
+        playerNameField.setFont(Font.font(null, 16));
+        nameLabel.setFont(Font.font(null, 16));
+
         errorMessage = new Label();
+        errorMessage.setFont(Font.font(null, 16));
         errorMessage.setTextFill(Color.RED);
 
         nameInputVBox.getChildren().addAll(nameLabel, playerNameField, scoreSaveButton, errorMessage);
@@ -53,8 +59,23 @@ public class GameUIViewsNameInput {
             return false;
         }
 
-        if(name.length() > name.replaceAll("[^A-Za-z0-9\\sÕÄÖÜŠŽšžõäöü]+","").length()) {
-            errorMessage.setText("Illegal character: ");
+        String tempString = name.replaceAll("[^A-Za-z0-9\\sÕÄÖÜŠŽšžõäöü]+","");
+
+        if(name.length() > tempString.length()) {
+
+            Character guiltyChar = name.charAt(0);
+
+            for (int i = 0; i < tempString.length(); i++) {
+                System.out.println(name.charAt(i) + " " + tempString.charAt(i));
+
+                if (name.charAt(i) != tempString.charAt(i)) {
+                    guiltyChar = name.charAt(i);
+                    break;
+                } else guiltyChar = name.charAt(i + 1);
+            }
+
+            errorMessage.setText("Illegal character: " + guiltyChar);
+
             return false;
         }
 

@@ -2,43 +2,17 @@ package i200Dodger;
 
 import java.io.*;
 
-/**
- * Created by Roland on 19/12/2015.
- */
 public class Settings {
 
-    public static int getBoardWidth() {
-        return Integer.parseInt(getSetting("boardWidth"));
-    }
-
-
-    public static void setBoardWidth(int newBoardWidth) {
-        setSetting("boardWidth", Integer.toString(newBoardWidth));
-    }
-
-
-    public static int getBoardHeight() {
-        return Integer.parseInt(getSetting("boardHeight"));
-    }
-
-
-    public static void setBoardHeight(int newBoardHeight) {
-        setSetting("boardHeight", Integer.toString(newBoardHeight));
-    }
-
-
-    public static String getPlayerName() {
-        return getSetting("playerName");
-    }
-
-
-    public static void setPlayerName(String playerName) {
-        setSetting("playerName", playerName);
-    }
+    /* Settings are stored in a text file. One row per setting. ParameterName:value
+    *
+    * getSetting checks if its input key matches the parameter name. If it does the corresponding values is returned.
+    *
+    * setSetting searches the settings file in the same way and changes the parameter value when it finds the correct row.
+    * */
 
 
     private static String getSetting(String key){
-        String result = "";
 
         File file = new File(System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings.txt");
         BufferedReader br = null;
@@ -67,7 +41,7 @@ public class Settings {
             e.printStackTrace();
         }
 
-        return "8"; // returns a sensible value, if reading from file fails
+        return "Fail";
 
     }
 
@@ -152,7 +126,36 @@ public class Settings {
             e.printStackTrace();
         }
 
-        System.out.println("new " + key + " = " + getSetting(key));
+    }
+
+
+    public static int getBoardWidth() {
+        return Integer.parseInt(getSetting("boardWidth"));
+    }
+
+
+    public static void setBoardWidth(int newBoardWidth) {
+        setSetting("boardWidth", Integer.toString(newBoardWidth));
+    }
+
+
+    public static int getBoardHeight() {
+        return Integer.parseInt(getSetting("boardHeight"));
+    }
+
+
+    public static void setBoardHeight(int newBoardHeight) {
+        setSetting("boardHeight", Integer.toString(newBoardHeight));
+    }
+
+
+    public static String getPlayerName() {
+        return getSetting("playerName");
+    }
+
+
+    public static void setPlayerName(String playerName) {
+        setSetting("playerName", playerName);
     }
 
 }

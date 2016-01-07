@@ -5,9 +5,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-import java.util.Timer;
-
 public class GameUI {
+
+    /* Sets up JavaFX Stage and launches the main menu. It could probably be done just as well in the Main method. */
 
     public GameUI (){
 
@@ -22,7 +22,8 @@ public class GameUI {
     }
 
     public static void drawGame(GridPane gameField, Game game) {
-    /* Draws obstacles and the player icon on a GridPane. Used during tha game and in the settings menu to draw a s
+
+    /* Draws obstacles and the player icon on a GridPane. Used during tha game and in the settings menu to draw a
     *  sample board. */
 
         int obstacleSideLength = (int) 400/Math.max(game.getBoardHeight(), game.getBoardWidth());
@@ -38,7 +39,7 @@ public class GameUI {
             }
         }
 
-        // Finally adds the player icon. If there was an obstacle in the same position, the player icon covers it.
+        // Finally adds the player icon. If there is an obstacle in the same position, the player icon covers it.
         Rectangle playerIcon = new Rectangle(obstacleSideLength,obstacleSideLength);
         playerIcon.setFill(Color.GREEN);
         gameField.add(playerIcon, game.getPlayerPosition(), game.getBoardHeight() - 1);

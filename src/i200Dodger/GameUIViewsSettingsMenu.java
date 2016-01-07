@@ -1,13 +1,11 @@
 package i200Dodger;
 
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -15,7 +13,9 @@ import javafx.stage.Stage;
 
 
 public class GameUIViewsSettingsMenu {
+
     public static void draw(Stage gameStage) {
+
         VBox settingsMenuVbox = new VBox();
         Scene settingsMenuScene = new Scene(settingsMenuVbox);
         AnchorPane gameFieldBackGround = new AnchorPane();
@@ -24,7 +24,7 @@ public class GameUIViewsSettingsMenu {
         Slider boardWidthSlider = new Slider(2,10,Settings.getBoardWidth());
         Slider boardHeightSlider = new Slider(2,10,Settings.getBoardHeight());
         Label boardWidthLabel = new Label("columns");
-        Label boardHeithtLabel = new Label("rows");
+        Label boardHeightLabel = new Label("rows");
         Label sampleBoardLabel = new Label("Sample board:");
 
         Rectangle sampleFieldBackGround = new Rectangle(400, 400);
@@ -47,7 +47,7 @@ public class GameUIViewsSettingsMenu {
 
         // Draw a sample board using current board size:
         Game game = new Game();
-        for (int i = 0; i < Settings.getBoardHeight()-2; i++) {
+        for (int i = 0; i < Settings.getBoardHeight()-1; i++) {
             game.insertRow();
         }
         GameUI.drawGame(gameField, game);
@@ -60,13 +60,14 @@ public class GameUIViewsSettingsMenu {
         }
 
         gameFieldBackGround.getChildren().addAll(gameField);
-        settingsMenuVbox.getChildren().addAll(backToStartMenuButton, boardWidthLabel, boardWidthSlider, boardHeithtLabel, boardHeightSlider, sampleBoardLabel,gameFieldBackGround);
-
-
+        settingsMenuVbox.getChildren().addAll(backToStartMenuButton, boardWidthLabel, boardWidthSlider, boardHeightLabel, boardHeightSlider, sampleBoardLabel,gameFieldBackGround);
 
         backToStartMenuButton.setOnAction(event -> {
             GameUIViewsMainMenu.draw(gameStage);
         });
+
+        /* Slider listeners. When sliders are set to a new integer value then listeners generate a new game with the new
+        * dimensions and draw a new sample game board.*/
 
         boardWidthSlider.valueProperty().addListener((observable, oldSliderValue, newSliderValue) -> {
 
@@ -78,7 +79,7 @@ public class GameUIViewsSettingsMenu {
                 GridPane sampleGameField = new GridPane();
 
 
-                for (int i = 0; i < Settings.getBoardHeight()-2; i++) {
+                for (int i = 0; i < Settings.getBoardHeight()-1; i++) {
                     sampleGame.insertRow();
                 }
 
@@ -89,6 +90,7 @@ public class GameUIViewsSettingsMenu {
 
                 gameFieldBackGround.setBottomAnchor(sampleGameField, 0.0);
 
+                // If the game board is not a square, then the sample board needs to be centered on the 400x400 background.
                 if (sampleGame.getBoardHeight() > sampleGame.getBoardWidth()) {
                     gameFieldBackGround.setLeftAnchor(sampleGameField, (double) (sampleGame.getBoardHeight()-sampleGame.getBoardWidth()) * (int) 400 / sampleGame.getBoardHeight() / 2);
                 }
@@ -97,7 +99,6 @@ public class GameUIViewsSettingsMenu {
 
             }
         });
-
 
         boardHeightSlider.valueProperty().addListener((observable, oldSliderValue, newSliderValue) -> {
 
@@ -108,7 +109,7 @@ public class GameUIViewsSettingsMenu {
                 Game sampleGame = new Game();
                 GridPane sampleGameField = new GridPane();
 
-                for (int i = 0; i < Settings.getBoardHeight() - 2; i++) {
+                for (int i = 0; i < Settings.getBoardHeight() - 1; i++) {
                     sampleGame.insertRow();
                 }
 
