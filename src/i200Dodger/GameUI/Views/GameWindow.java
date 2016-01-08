@@ -1,8 +1,9 @@
-package i200Dodger;
+package i200Dodger.GameUI.Views;
 
+import i200Dodger.GameLogic.Game;
+import i200Dodger.GameUI.Utils.DrawGame;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -13,7 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class GameUIViewsGame {
+public class GameWindow {
 
     public static void draw(Stage gameStage, Game game) {
 
@@ -27,7 +28,7 @@ public class GameUIViewsGame {
         scoreBoard.setFont(Font.font(null, FontWeight.BOLD, 20));
         updateScoreBoard(game,scoreBoard);
 
-        GameUI.drawGame(gameField, game);
+        DrawGame.draw(gameField, game);
 
         // Position UI elements
         gamePane.setTop(scoreBoard);
@@ -50,26 +51,26 @@ public class GameUIViewsGame {
                 game.movePlayerLeft();
                 game.insertRow();
                 game.evaluateGame();
-                if(game.isGameOver()) GameUIViewsGameOverMenu.draw(gameStage, game);
+                if(game.isGameOver()) GameOverMenu.draw(gameStage, game);
                 updateScoreBoard(game,scoreBoard);
-                GameUI.drawGame(gameField, game);
+                DrawGame.draw(gameField, game);
             }
 
             if (input.equals("d")){
                 game.movePlayerRight();
                 game.insertRow();
                 game.evaluateGame();
-                if(game.isGameOver()) GameUIViewsGameOverMenu.draw(gameStage, game);
+                if(game.isGameOver()) GameOverMenu.draw(gameStage, game);
                 updateScoreBoard(game,scoreBoard);
-                GameUI.drawGame(gameField, game);
+                DrawGame.draw(gameField, game);
             }
 
             if (input.equals("s") || input.equals("w") || input.equals(" ")) {
                 game.insertRow();
                 game.evaluateGame();
-                if(game.isGameOver()) GameUIViewsGameOverMenu.draw(gameStage, game);
+                if(game.isGameOver()) GameOverMenu.draw(gameStage, game);
                 updateScoreBoard(game,scoreBoard);
-                GameUI.drawGame(gameField, game);
+                DrawGame.draw(gameField, game);
             }
 
         });
@@ -93,8 +94,8 @@ public class GameUIViewsGame {
                     public void run() {
                         game.insertRow();
                         game.evaluateGame();
-                        if (game.isGameOver()) GameUIViewsGameOverMenu.draw(gameStage, game);
-                        GameUI.drawGame(gameField, game);
+                        if (game.isGameOver()) GameOverMenu.draw(gameStage, game);
+                        DrawGame.draw(gameField, game);
                         updateScoreBoard(game, scoreBoard);
                         if (!game.isGameOver())
                             setTimer(gameStage, game, gameField, scoreBoard); // new timer starts only when the game is not over

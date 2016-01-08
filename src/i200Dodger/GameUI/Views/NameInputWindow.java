@@ -1,5 +1,8 @@
-package i200Dodger;
+package i200Dodger.GameUI.Views;
 
+import i200Dodger.GameLogic.Game;
+import i200Dodger.GameLogic.HighScoresDB;
+import i200Dodger.GameLogic.Settings;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,7 +13,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 
-public class GameUIViewsNameInput {
+public class NameInputWindow {
 
     /* Used when player saves a high score.
     * error message is an internal variable to display error messages when player inserts unsuitable names*/
@@ -41,7 +44,7 @@ public class GameUIViewsNameInput {
             if (isLegalName(playerNameField.getText())){
                 Settings.setPlayerName(playerNameField.getText());
                 HighScoresDB.insertHighScore(Settings.getPlayerName(), game.getScore(), Settings.getBoardHeight(), Settings.getBoardWidth(), game.getGameEndDate());
-                GameUIViewsHighScores.draw(gameStage);
+                HighScoresWindow.draw(gameStage);
             }
         });
 

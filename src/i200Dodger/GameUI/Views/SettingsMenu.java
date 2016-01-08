@@ -1,5 +1,8 @@
-package i200Dodger;
+package i200Dodger.GameUI.Views;
 
+import i200Dodger.GameLogic.Game;
+import i200Dodger.GameLogic.Settings;
+import i200Dodger.GameUI.Utils.DrawGame;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,7 +15,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 
-public class GameUIViewsSettingsMenu {
+public class SettingsMenu {
 
     public static void draw(Stage gameStage) {
 
@@ -21,7 +24,7 @@ public class GameUIViewsSettingsMenu {
         AnchorPane gameFieldBackGround = new AnchorPane();
         GridPane gameField = new GridPane();
         Button backToStartMenuButton = new Button("Back to Start Menu");
-        Slider boardWidthSlider = new Slider(2,10,Settings.getBoardWidth());
+        Slider boardWidthSlider = new Slider(2,10, Settings.getBoardWidth());
         Slider boardHeightSlider = new Slider(2,10,Settings.getBoardHeight());
         Label boardWidthLabel = new Label("columns");
         Label boardHeightLabel = new Label("rows");
@@ -50,7 +53,8 @@ public class GameUIViewsSettingsMenu {
         for (int i = 0; i < Settings.getBoardHeight()-1; i++) {
             game.insertRow();
         }
-        GameUI.drawGame(gameField, game);
+
+        DrawGame.draw(gameField, game);
 
         gameFieldBackGround.setBottomAnchor(gameField, 0.0);
 
@@ -63,7 +67,7 @@ public class GameUIViewsSettingsMenu {
         settingsMenuVbox.getChildren().addAll(backToStartMenuButton, boardWidthLabel, boardWidthSlider, boardHeightLabel, boardHeightSlider, sampleBoardLabel,gameFieldBackGround);
 
         backToStartMenuButton.setOnAction(event -> {
-            GameUIViewsMainMenu.draw(gameStage);
+            MainMenu.draw(gameStage);
         });
 
         /* Slider listeners. When sliders are set to a new integer value then listeners generate a new game with the new
@@ -86,7 +90,7 @@ public class GameUIViewsSettingsMenu {
                 Rectangle blankField = new Rectangle(400, 400);
                 blankField.setFill(Color.BLACK);
 
-                GameUI.drawGame(sampleGameField, sampleGame);
+                DrawGame.draw(sampleGameField, sampleGame);
 
                 gameFieldBackGround.setBottomAnchor(sampleGameField, 0.0);
 
@@ -116,7 +120,7 @@ public class GameUIViewsSettingsMenu {
                 Rectangle blankField = new Rectangle(400, 400);
                 blankField.setFill(Color.BLACK);
 
-                GameUI.drawGame(sampleGameField, sampleGame);
+                DrawGame.draw(sampleGameField, sampleGame);
 
                 gameFieldBackGround.setBottomAnchor(sampleGameField, 0.0);
 

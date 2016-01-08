@@ -1,7 +1,8 @@
-package i200Dodger;
+package i200Dodger.GameUI.Views;
 
+import i200Dodger.GameUI.Buttons.MainMenuButton;
+import i200Dodger.GameLogic.HighScoresDB;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -10,19 +11,15 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 
-public class GameUIViewsHighScores {
+public class HighScoresWindow {
 
     public static void draw(Stage gameStage){
 
         VBox highScoresVBox = new VBox();
         Scene gameOverScene = new Scene(highScoresVBox);
         GridPane scoresPane = new GridPane();
-        Button goToMainMenuButton = new Button("Go to main menu");
 
-
-        goToMainMenuButton.setOnAction(event -> {
-            GameUIViewsMainMenu.draw(gameStage);
-        });
+        MainMenuButton goToMainMenuButton = new MainMenuButton(gameStage);
 
 
         Label tableHeaderPlace = new Label("#  ");

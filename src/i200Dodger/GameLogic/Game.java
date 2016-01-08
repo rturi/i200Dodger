@@ -1,4 +1,4 @@
-package i200Dodger;
+package i200Dodger.GameLogic;
 
 import java.time.LocalDate;
 

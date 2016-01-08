@@ -1,27 +1,16 @@
-package i200Dodger;
+package i200Dodger.GameUI.Utils;
 
+import i200Dodger.GameLogic.Game;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
-public class GameUI {
+/**
+ * Created by Roland on 08/01/2016.
+ */
+public class DrawGame {
 
-    /* Sets up JavaFX Stage and launches the main menu. It could probably be done just as well in the Main method. */
-
-    public GameUI (){
-
-        Stage gameStage = new Stage();
-
-        gameStage.setOnCloseRequest(event1 -> {System.exit(0);}); // Just to make sure everything gets closed
-        gameStage.setTitle("i200Dodger");
-
-        GameUIViewsMainMenu.draw(gameStage);
-        gameStage.show();
-
-    }
-
-    public static void drawGame(GridPane gameField, Game game) {
+    public static void draw(GridPane gameField, Game game) {
 
     /* Draws obstacles and the player icon on a GridPane. Used during tha game and in the settings menu to draw a
     *  sample board. */
@@ -45,4 +34,5 @@ public class GameUI {
         gameField.add(playerIcon, game.getPlayerPosition(), game.getBoardHeight() - 1);
 
     }
+
 }

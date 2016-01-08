@@ -1,8 +1,6 @@
-package i200Dodger;
+package i200Dodger.GameLogic;
 
-/**
- * Created by Roland on 03/12/2015.
- */
+
 public class Player {
 
     private int position;
