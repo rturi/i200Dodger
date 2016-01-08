@@ -5,7 +5,7 @@ import i200Dodger.GameUI.Buttons.StartGameButton;
 import i200Dodger.GameUI.Buttons.MainMenuButton;
 import i200Dodger.GameUI.Elements.GameButton;
 import i200Dodger.GameLogic.HighScoresDB;
-import i200Dodger.settings.GameUIElementsLabel;
+import i200Dodger.GameUI.Elements.GameLabel;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -18,7 +18,7 @@ public class GameOverMenu {
         VBox gameOverVbox = new VBox();
         Scene gameOverScene = new Scene(gameOverVbox);
 
-        GameUIElementsLabel gameOver = new GameUIElementsLabel("Game over. Your score was " + game.getScore() + ". Try again.");
+        GameLabel gameOver = new GameLabel("Game over. Your score was " + game.getScore() + ". Try again.");
         StartGameButton startGameButton = new StartGameButton(gameStage);
         MainMenuButton goToMainMenuButton = new MainMenuButton(gameStage);
         GameButton saveHighScoreButton = new GameButton("Save high score");

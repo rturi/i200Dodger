@@ -14,7 +14,13 @@ public class Settings {
 
     private static String getSetting(String key){
 
-        File file = new File(System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings.txt");
+        //fileName Windows
+        //String fileName = System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings.txt";
+
+        //fileName linux
+        String fileName = System.getProperty("user.dir") + "/src/i200Dodger/settings/settings.txt";
+
+        File file = new File(fileName);
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(file));
@@ -47,10 +53,21 @@ public class Settings {
 
 
     private static void setSetting(String key, String newValue) {
-        System.out.println("starting " + key + " change.. old value " + getSetting(key) + " new value = " + newValue);
 
-        File oldSettingsFile = new File(System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings.txt");
-        File newSettingsFile = new File(System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings_tmp.txt");
+        //oldFileName Windows
+        //String oldFileName = System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings.txt";
+        //oldFileName linux
+        String oldFileName = System.getProperty("user.dir") + "/src/i200Dodger/settings/settings.txt";
+
+
+        //newFileName Windows
+        //String newFileName = System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings.txt";
+        //oldFileName linux
+        String newFileName = System.getProperty("user.dir") + "/src/i200Dodger/settings/settings_tmp.txt";
+
+
+        File oldSettingsFile = new File(oldFileName);
+        File newSettingsFile = new File(newFileName);
 
         FileWriter writer = null;
         try {
