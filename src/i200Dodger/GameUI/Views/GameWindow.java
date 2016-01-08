@@ -1,14 +1,12 @@
 package i200Dodger.GameUI.Views;
 
 import i200Dodger.GameLogic.Game;
+import i200Dodger.GameUI.Elements.GameLabelBold;
 import i200Dodger.GameUI.Utils.DrawGame;
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,11 +19,10 @@ public class GameWindow {
         BorderPane gamePane = new BorderPane();
         GridPane gameField = new GridPane();
         Scene gameScene = new Scene(gamePane);
-        Label scoreBoard = new Label();
+        GameLabelBold scoreBoard = new GameLabelBold("");
 
 
-        // Change score boards font and set it up with initial values.
-        scoreBoard.setFont(Font.font(null, FontWeight.BOLD, 20));
+        // Set the score board up with initial values.
         updateScoreBoard(game,scoreBoard);
 
         DrawGame.draw(gameField, game);
@@ -34,7 +31,6 @@ public class GameWindow {
         gamePane.setTop(scoreBoard);
         gamePane.setCenter(gameField);
         gameStage.setScene(gameScene);
-        gameStage.show();
 
         // Begin the timer that automatically inserts a new row periodically. Interval shortens as score increases.
         setTimer(gameStage, game, gameField, scoreBoard);
@@ -77,7 +73,7 @@ public class GameWindow {
 
     }
 
-    private static void setTimer(Stage gameStage, Game game, GridPane gameField, Label scoreBoard) {
+    private static void setTimer(Stage gameStage, Game game, GridPane gameField, GameLabelBold scoreBoard) {
 
         /* Starts a timer and when the timer runs out starts a new timer that starts another timer until game is over.
         * Takes in a punch of parameters so it can update the game score and update the game board when every timer
@@ -105,7 +101,7 @@ public class GameWindow {
         }, 500 - game.getScore() * 3);
     }
 
-    private static void updateScoreBoard(Game game, Label scoreBoard) {
+    private static void updateScoreBoard(Game game, GameLabelBold scoreBoard) {
         scoreBoard.setText("Lives: " + game.getLives() + "    Score: " + game.getScore());
     }
 

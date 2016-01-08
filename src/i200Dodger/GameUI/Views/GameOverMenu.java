@@ -30,12 +30,12 @@ public class GameOverMenu {
         } else
             gameOverVbox.getChildren().addAll(gameOver, startGameButton, goToMainMenuButton);
 
+        gameStage.setScene(gameOverScene);
 
         saveHighScoreButton.setOnAction(event -> {
             NameInputWindow.draw(gameStage, game);
         });
 
-        gameStage.setScene(gameOverScene);
     }
 
 }

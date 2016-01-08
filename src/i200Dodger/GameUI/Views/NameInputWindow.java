@@ -3,9 +3,9 @@ package i200Dodger.GameUI.Views;
 import i200Dodger.GameLogic.Game;
 import i200Dodger.GameLogic.HighScoresDB;
 import i200Dodger.GameLogic.Settings;
+import i200Dodger.GameUI.Elements.GameButton;
+import i200Dodger.GameUI.Elements.GameLabel;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -18,21 +18,19 @@ public class NameInputWindow {
     /* Used when player saves a high score.
     * error message is an internal variable to display error messages when player inserts unsuitable names*/
 
-    private static Label errorMessage;
+    private static GameLabel errorMessage;
 
     public static void draw(Stage gameStage, Game game) {
 
         VBox nameInputVBox = new VBox();
         Scene nameInputScene = new Scene(nameInputVBox);
-        Label nameLabel = new Label("Enter your name");
+        GameLabel nameLabel = new GameLabel("Enter your name");
         TextField playerNameField = new TextField(Settings.getPlayerName());
-        Button scoreSaveButton = new Button("Save");
+        GameButton scoreSaveButton = new GameButton("Save");
 
         playerNameField.setFont(Font.font(null, 16));
-        nameLabel.setFont(Font.font(null, 16));
 
-        errorMessage = new Label();
-        errorMessage.setFont(Font.font(null, 16));
+        errorMessage = new GameLabel("");
         errorMessage.setTextFill(Color.RED);
 
         nameInputVBox.getChildren().addAll(nameLabel, playerNameField, scoreSaveButton, errorMessage);

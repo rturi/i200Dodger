@@ -9,7 +9,7 @@ public class GameLabel extends Label {
     public GameLabel(String labelName){
 
         this.setText(labelName);
-        this.setFont(Font.font(null, 20));
+        this.setFont(Font.font(null, 16));
 
     }
 }

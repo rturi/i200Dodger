@@ -11,16 +11,13 @@ public class Settings {
     * setSetting searches the settings file in the same way and changes the parameter value when it finds the correct row.
     * */
 
+    private static String settingsFileName = System.getProperty("user.dir") + "/src/i200Dodger/settings/settings.txt";
+    private static String tmpSettingsFileName = System.getProperty("user.dir") + "/src/i200Dodger/settings/settings_tmp.txt";
 
     private static String getSetting(String key){
 
-        //fileName Windows
-        //String fileName = System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings.txt";
 
-        //fileName linux
-        String fileName = System.getProperty("user.dir") + "/src/i200Dodger/settings/settings.txt";
-
-        File file = new File(fileName);
+        File file = new File(settingsFileName);
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(file));
@@ -54,20 +51,10 @@ public class Settings {
 
     private static void setSetting(String key, String newValue) {
 
-        //oldFileName Windows
-        //String oldFileName = System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings.txt";
-        //oldFileName linux
-        String oldFileName = System.getProperty("user.dir") + "/src/i200Dodger/settings/settings.txt";
+        System.out.println("test");
 
-
-        //newFileName Windows
-        //String newFileName = System.getProperty("user.dir") + "\\src\\i200Dodger\\settings\\settings.txt";
-        //oldFileName linux
-        String newFileName = System.getProperty("user.dir") + "/src/i200Dodger/settings/settings_tmp.txt";
-
-
-        File oldSettingsFile = new File(oldFileName);
-        File newSettingsFile = new File(newFileName);
+        File oldSettingsFile = new File(settingsFileName);
+        File newSettingsFile = new File(tmpSettingsFileName);
 
         FileWriter writer = null;
         try {
@@ -89,7 +76,6 @@ public class Settings {
                 String[] workerLine = line.split(":");
                 if (workerLine[0].equals(key)) {
                     writer.write(key + ":" + newValue + "\r\n");
-                    System.out.println("test");
                 } else
                     writer.write(line + "\r\n");
                 line = reader.readLine();

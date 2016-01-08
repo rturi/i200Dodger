@@ -17,10 +17,11 @@ public class MainMenu {
         StartGameButton startGameButton = new StartGameButton(gameStage);
         GameButton settingsButton = new GameButton("Settings");
         GameButton highScoresButton = new GameButton("High scores");
-        GameLabel manual = new GameLabel("Avoid the reds, go for the blues.\nControls: A, S, D");
+        GameLabel manual = new GameLabel("\nred = lives--\nblue = points++\n\nControls:\n  left: A\n  forward:  S\n  left: D");
 
+        startMenuVbox.setMinWidth(200);
 
-        startMenuVbox.getChildren().addAll(manual, startGameButton, highScoresButton, settingsButton);
+        startMenuVbox.getChildren().addAll(startGameButton, highScoresButton, settingsButton, manual);
 
 
         settingsButton.setOnAction(event -> {

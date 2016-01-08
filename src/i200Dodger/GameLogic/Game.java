@@ -194,11 +194,11 @@ public class Game {
 
         /* Looks at the obstacles and player and changes the score and/or lives if needed */
 
-        if(getObstacle(boardHeight-1, this.player.getPosition()).getColor().equals("red")) {
+        if(obstacles[boardHeight-1][this.player.getPosition()].getColor().equals("red")) {
             player.reduceLives();
         }
 
-        if(this.getObstacle(boardHeight-1, this.player.getPosition()).getColor().equals("blue")) {
+        if(obstacles[boardHeight-1][this.player.getPosition()].getColor().equals("blue")) {
             score++;
         }
     }

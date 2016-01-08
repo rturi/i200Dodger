@@ -2,10 +2,10 @@ package i200Dodger.GameUI.Views;
 
 import i200Dodger.GameLogic.Game;
 import i200Dodger.GameLogic.Settings;
+import i200Dodger.GameUI.Buttons.MainMenuButton;
+import i200Dodger.GameUI.Elements.GameLabel;
 import i200Dodger.GameUI.Utils.DrawGame;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -23,12 +23,12 @@ public class SettingsMenu {
         Scene settingsMenuScene = new Scene(settingsMenuVbox);
         AnchorPane gameFieldBackGround = new AnchorPane();
         GridPane gameField = new GridPane();
-        Button backToStartMenuButton = new Button("Back to Start Menu");
+        MainMenuButton backToStartMenuButton = new MainMenuButton(gameStage);
         Slider boardWidthSlider = new Slider(2,10, Settings.getBoardWidth());
         Slider boardHeightSlider = new Slider(2,10,Settings.getBoardHeight());
-        Label boardWidthLabel = new Label("columns");
-        Label boardHeightLabel = new Label("rows");
-        Label sampleBoardLabel = new Label("Sample board:");
+        GameLabel boardWidthLabel = new GameLabel("columns");
+        GameLabel boardHeightLabel = new GameLabel("rows");
+        GameLabel sampleBoardLabel = new GameLabel("Sample board:");
 
         Rectangle sampleFieldBackGround = new Rectangle(400, 400);
         sampleFieldBackGround.setFill(Color.BLACK);
@@ -66,9 +66,6 @@ public class SettingsMenu {
         gameFieldBackGround.getChildren().addAll(gameField);
         settingsMenuVbox.getChildren().addAll(backToStartMenuButton, boardWidthLabel, boardWidthSlider, boardHeightLabel, boardHeightSlider, sampleBoardLabel,gameFieldBackGround);
 
-        backToStartMenuButton.setOnAction(event -> {
-            MainMenu.draw(gameStage);
-        });
 
         /* Slider listeners. When sliders are set to a new integer value then listeners generate a new game with the new
         * dimensions and draw a new sample game board.*/
